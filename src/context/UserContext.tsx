@@ -9,8 +9,17 @@ export interface UserType {
   fullName: string;
   password: string;
   role: string;
-  id: null | number;
+  id: number;
   score: number;
+}
+
+export interface UserUpdateType {
+  fullName: string;
+  password: string;
+  role: string;
+  id: number;
+  score: number;
+  updateScore: number;
 }
 export const INIT_USER: UserType = {
   score: 0,

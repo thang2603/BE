@@ -1,15 +1,11 @@
-import { Button, Card, Input } from "antd";
+import { Button, Card } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import { UserType } from "../../context/UserContext";
-import {
-  NumberQuestionType,
-  QuestionType,
-  UpdateScoreType,
-} from "../../types/Login";
+import { QuestionType, UpdateScoreType } from "../../types/Login";
 import { INIT_QUESTION } from "../../constants/constants";
 
-const Control1 = () => {
+const ControlGroup = () => {
   const { socket } = useContext(SocketContext);
   const [listUser, setListUser] = useState<UserType[]>([]);
   const [numberQuestion, setNumberQuestion] =
@@ -18,10 +14,8 @@ const Control1 = () => {
     socket.emit("listUser", "admin");
   };
 
-  const handleNextQuestion = (msg: NumberQuestionType) => {
-    if (msg.noQues <= 6) {
-      socket.emit("quesGame1", msg);
-    }
+  const handleNextQuestion = (noQues: number) => {
+    socket.emit("quesGroup1", noQues);
   };
 
   const handleUpdateScore = (msg: UpdateScoreType) => {
@@ -59,22 +53,15 @@ const Control1 = () => {
         <div>
           <p>Danh sách thí sinh</p>
           <Button onClick={handleGetListUser}>Lấy danh sách thí sinh</Button>
+          <Button onClick={() => handleNextQuestion(numberQuestion.id + 1)}>
+            Lấy câu hỏi
+          </Button>
         </div>
         <div className=" flex items-center gap-6">
           <div className="flex items-center gap-2 flex-col">
             {listUser.map((item) => (
               <div key={item?.id} className="flex items-center gap-4">
                 <p>{item.fullName}</p>
-                <Button
-                  onClick={() =>
-                    handleNextQuestion({
-                      idUser: item.id as number,
-                      noQues: numberQuestion.no + 1,
-                    })
-                  }
-                >
-                  Lấy câu hỏi
-                </Button>
 
                 <div className="flex gap-3">
                   <Button
@@ -108,4 +95,4 @@ const Control1 = () => {
   );
 };
 
-export default Control1;
+export default ControlGroup;

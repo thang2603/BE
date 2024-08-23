@@ -20,13 +20,13 @@ const Login = () => {
   const handleSubmit = () => {
     localStorage.setItem("user", JSON.stringify(login));
     socket.emit(`login`, login);
-    // navigate("/vong/1/user");
   };
 
   useEffect(() => {
-    socket.on("userInfor", (msg: UserType) => {
+    socket.on("userInfor", (msg: UserType[]) => {
       console.log(msg);
-      localStorage.setItem("user", JSON.stringify(msg));
+      localStorage.setItem("user", JSON.stringify(msg[0]));
+      navigate("/vong/1/user");
       setUser(msg);
     });
 

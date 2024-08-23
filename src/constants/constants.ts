@@ -1,4 +1,4 @@
-import { QuestionType } from "../types/Login";
+import { AnswerType, QuestionType } from "../types/Login";
 
 export const INIT_QUESTION: QuestionType = {
   id: 0,
