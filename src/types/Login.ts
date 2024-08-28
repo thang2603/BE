@@ -14,6 +14,7 @@ export interface QuestionType {
   no: number;
   idUser: number;
   score: number;
+  type?: number;
 }
 
 export interface QuestionType2 {
@@ -37,8 +38,10 @@ export interface UpdateScoreType {
 export interface AnswerType {
   idUser: number;
   ans: string;
+  updateAt?: string | number;
 }
 
 export interface AnserDetailType extends UserType {
   ans: string;
+  updateAt?: number;
 }
