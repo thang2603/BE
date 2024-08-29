@@ -1,4 +1,4 @@
-import { QuestionType } from "../types/Login";
+import { QuestionFourType, QuestionType } from "../types/Login";
 import image1 from "../assets/vong3/cau1.png";
 import image2 from "../assets/vong3/cau2.png";
 import image3 from "../assets/vong3/cau3.png";
@@ -41,3 +41,12 @@ export const listVideo = [
     url: video,
   },
 ];
+
+export const INIT_QUESTION_FOUR: QuestionFourType = {
+  id: 0,
+  ques: "",
+  ans: "",
+  idUser: 0,
+  score: 0,
+  type: 0,
+};

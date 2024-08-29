@@ -45,3 +45,12 @@ export interface AnserDetailType extends UserType {
   ans: string;
   updateAt?: number;
 }
+
+export interface QuestionFourType {
+  id: number;
+  ques: string;
+  ans: string;
+  score: number;
+  type: number;
+  idUser: number;
+}

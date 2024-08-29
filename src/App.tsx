@@ -11,6 +11,8 @@ import Control2 from "./components/vong_2/Control2";
 import ControlGroup from "./components/vong_1/ControlGroup";
 import Vong3 from "./components/vong_3/Vong3";
 import Control3 from "./components/vong_3/Control3";
+import Vong4 from "./components/vong_4/Vong4";
+import Control4 from "./components/vong_4/Control4";
 
 function App() {
   return (
@@ -32,6 +34,10 @@ function App() {
         <Route path="vong/3">
           <Route path="user" element={<Vong3 />} />
           <Route path="control" element={<Control3 />} />
+        </Route>
+        <Route path="vong/4">
+          <Route path="user" element={<Vong4 />} />
+          <Route path="control" element={<Control4 />} />
         </Route>
       </Routes>
     </DefaultLayout>

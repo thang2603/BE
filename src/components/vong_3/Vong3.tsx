@@ -9,14 +9,8 @@ import {
   listImageGame3,
   listVideo,
 } from "../../constants/constants";
-import {
-  AnserDetailType,
-  AnswerType,
-  QuestionType,
-  QuestionType2,
-} from "../../types/Login";
+import { AnserDetailType, AnswerType, QuestionType } from "../../types/Login";
 
-import imageTest from "../../assets/test.png";
 import ShowPoint from "./ShowPoint";
 
 const Vong3 = () => {
