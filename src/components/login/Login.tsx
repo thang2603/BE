@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext, UserType } from "../../context/UserContext";
@@ -7,7 +7,7 @@ import { SocketContext } from "../../context/SocketContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const { socket } = useContext(SocketContext);
   const [login, setLogin] = useState<UserType>({
     ...INIT_USER,
@@ -18,22 +18,27 @@ const Login = () => {
   };
 
   const handleSubmit = () => {
-    localStorage.setItem("user", JSON.stringify(login));
-    socket.emit(`login`, login);
+    if (login.fullName && login?.password) socket.emit(`login`, login);
+    else {
+      message.warning("Vui lòng nhập đầy đủ thông tin");
+    }
   };
 
   useEffect(() => {
     socket.on("userInfor", (msg: UserType[]) => {
-      console.log(msg);
-      localStorage.setItem("user", JSON.stringify(msg[0]));
-      navigate("/vong/1/user");
-      setUser(msg);
+      if (msg?.length > 0) {
+        localStorage.setItem("user", JSON.stringify(msg[0]));
+        navigate("/vong/1/user");
+        setUser(msg[0]);
+      } else {
+        message.warning("Tài khoản hoặc mật khẩu không chính xác");
+      }
     });
 
     return () => {
       socket.off("userInfor");
     };
-  }, [socket, setUser]);
+  }, [socket, setUser, navigate]);
   return (
     <div className="w-screen h-screen  flex justify-center items-center flex-col">
       <Form

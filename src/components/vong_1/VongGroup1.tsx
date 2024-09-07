@@ -70,10 +70,15 @@ const VongGroup1 = () => {
         </Button>
       </div>
       <div className="flex  gap-6 min-w-[1000px]">
-        <Card title={`Câu hỏi ${numberQuestion.id}`} className="flex-1">
-          <p>{numberQuestion.ques}</p>
+        <Card
+          title={
+            <span className="text-white font-semibol">{`Câu hỏi ${numberQuestion.id}`}</span>
+          }
+          className="flex-1 bg-sky-800"
+        >
+          <p className="text-white font-semibold">{numberQuestion.ques}</p>
         </Card>
-        <div className="min-w-96 flex flex-col gap-2">
+        <div className="min-w-96 flex flex-col gap-2 text-white">
           {listUser.map((item) => (
             <div
               style={
@@ -84,7 +89,7 @@ const VongGroup1 = () => {
                     }
                   : {}
               }
-              className="flex gap-2 items-center justify-between bg-white rounded-md p-2"
+              className="flex gap-2 items-center justify-between bg-sky-800 text-white rounded-md p-2"
             >
               <p className="font-semibold">{item.fullName}</p>
               <p className="w-7 font-semibold">{item?.score}</p>

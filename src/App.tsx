@@ -13,31 +13,106 @@ import Vong3 from "./components/vong_3/Vong3";
 import Control3 from "./components/vong_3/Control3";
 import Vong4 from "./components/vong_4/Vong4";
 import Control4 from "./components/vong_4/Control4";
+import { useContext } from "react";
+import { UserContext } from "./context/UserContext";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
+  const { user } = useContext(UserContext);
   return (
     <DefaultLayout>
+      <div></div>
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="vong/1">
-          <Route path="control" element={<Control1 />} />
-          <Route path="user" element={<Vong1 />} />
+          <Route
+            path="control"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <Control1 />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="user"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <Vong1 />
+              </ProtectedRoute>
+            }
+          />
         </Route>
         <Route path="vong-group/1">
-          <Route path="control" element={<ControlGroup />} />
-          <Route path="user" element={<VongGroup1 />} />
+          <Route
+            path="control"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <ControlGroup />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="user"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <VongGroup1 />
+              </ProtectedRoute>
+            }
+          />
         </Route>
         <Route path="vong/2">
-          <Route path="user" element={<Vong2 />} />
-          <Route path="control" element={<Control2 />} />
+          <Route
+            path="user"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <Vong2 />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="control"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <Control2 />
+              </ProtectedRoute>
+            }
+          />
         </Route>
         <Route path="vong/3">
-          <Route path="user" element={<Vong3 />} />
-          <Route path="control" element={<Control3 />} />
+          <Route
+            path="user"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <Vong3 />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="control"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <Control3 />
+              </ProtectedRoute>
+            }
+          />
         </Route>
         <Route path="vong/4">
-          <Route path="user" element={<Vong4 />} />
-          <Route path="control" element={<Control4 />} />
+          <Route
+            path="user"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <Vong4 />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="control"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <Control4 />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
     </DefaultLayout>

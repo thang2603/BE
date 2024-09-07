@@ -1,4 +1,4 @@
-import { Button, Card, Input } from "antd";
+import { Button, Card, Input, Popconfirm } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import { UserType } from "../../context/UserContext";
@@ -8,8 +8,10 @@ import {
   UpdateScoreType,
 } from "../../types/Login";
 import { INIT_QUESTION } from "../../constants/constants";
+import { useNavigate } from "react-router-dom";
 
 const Control1 = () => {
+  const navigate = useNavigate();
   const { socket } = useContext(SocketContext);
   const [listUser, setListUser] = useState<UserType[]>([]);
   const [numberQuestion, setNumberQuestion] =
@@ -30,6 +32,11 @@ const Control1 = () => {
 
   const handleStart = () => {
     socket.emit("startControl", "Start");
+  };
+
+  const handleNextGroup = () => {
+    navigate("/vong-group/1/control");
+    socket.emit("nextGroup1", "next1");
   };
 
   useEffect(() => {
@@ -101,7 +108,15 @@ const Control1 = () => {
               </div>
             ))}
           </div>
-          <Button onClick={handleStart}>Bắt đầu tính thời gian</Button>
+          <div className="flex gap-2">
+            <Button onClick={handleStart}>Bắt đầu tính thời gian</Button>
+            <Popconfirm
+              title="Chuyến sang phần thi chung vòng 1"
+              onConfirm={handleNextGroup}
+            >
+              <Button>Chuyển sang phần thi chung</Button>
+            </Popconfirm>
+          </div>
         </div>
       </div>
     </Card>

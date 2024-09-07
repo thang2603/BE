@@ -39,8 +39,17 @@ const Control4 = () => {
   const handleSendQuestion = (valueQues: QuestionFourType) => {
     socket.emit("sendQuestion4", valueQues);
   };
+
   const updateScore = () => {
     socket.emit("updateScore4", listUser);
+  };
+
+  const handleStar = (idUser: number) => {
+    socket.emit("start", idUser);
+  };
+
+  const handleCancelStar = () => {
+    socket.emit("cancelStart");
   };
 
   const columnsUser = [
@@ -84,6 +93,14 @@ const Control4 = () => {
       key: "id",
       render: (text: number, record: UserUpdateType) => (
         <Button onClick={() => handleQuestionByUser(text)}>Lấy câu hỏi</Button>
+      ),
+    },
+    {
+      title: "Ngôi sao hi vọng",
+      dataIndex: "id",
+      key: "id",
+      render: (text: number, record: UserUpdateType) => (
+        <Button onClick={() => handleStar(text)}>Ngôi sao hi vọng</Button>
       ),
     },
   ];
@@ -135,6 +152,7 @@ const Control4 = () => {
       <div className="flex gap-4">
         <Button onClick={handleGetListUser}>Danh sách thí sinh</Button>
         <Button onClick={updateScore}>Cập nhật điểm</Button>
+        <Button onClick={handleCancelStar}>Huỷ ngôi sao hi vọng</Button>
       </div>
       <div className="flex gap-8 ">
         <Table columns={columnsUser} dataSource={listUser} pagination={false} />
