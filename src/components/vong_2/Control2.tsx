@@ -1,13 +1,15 @@
-import { Button, Card, Table } from "antd";
+import { Button, Card, Popconfirm, Table } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import { UserType, UserUpdateType } from "../../context/UserContext";
 import { QuestionType, QuestionType2 } from "../../types/Login";
 import { INIT_QUESTION } from "../../constants/constants";
 import { convertScore } from "../../constants/until";
+import { useNavigate } from "react-router-dom";
 
 const Control2 = () => {
   const { socket } = useContext(SocketContext);
+  const navigate = useNavigate();
   const [listUser, setListUser] = useState<UserUpdateType[]>([]);
   const [listQuestion, setListQuestion] = useState<QuestionType2[]>([]);
   const [numberQuestion, setNumberQuestion] =
@@ -29,8 +31,12 @@ const Control2 = () => {
     return () => {
       socket.off("listUserServer2");
     };
-  }, []);
+  }, [socket]);
 
+  const handleNextGame3 = () => {
+    socket.emit("next3", "next3");
+    navigate("/vong/3/control");
+  };
   const handleGetListUser = () => {
     socket.emit("listUser2", "admin");
     socket.emit("listQuestion2", "admin");
@@ -89,7 +95,7 @@ const Control2 = () => {
         </div>
         <div className="flex gap-3 flex-col">
           <div>
-            <div className="flex gap-6">
+            <div className="flex gap-3">
               <Button onClick={handleGetListUser}>
                 Lấy danh sách thí sinh
               </Button>
@@ -98,6 +104,12 @@ const Control2 = () => {
               <Button onClick={handleShowResult}>
                 Hiện thị câu trả lời của thí sinh
               </Button>
+              <Popconfirm
+                title="Bạn có muốn chuyển qua vòng 3 không ?"
+                onConfirm={handleNextGame3}
+              >
+                <Button>Chuyển qua vòng 3</Button>
+              </Popconfirm>
             </div>
             <p>Danh sách thí sinh</p>
           </div>

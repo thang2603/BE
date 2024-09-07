@@ -14,9 +14,11 @@ import {
 import ImageMagic from "./ImageMagic";
 import RowWord from "./RowWord";
 import ShowPoint from "./ShowPoint";
+import { useNavigate } from "react-router-dom";
 
 const Vong2 = () => {
   const { socket } = useContext(SocketContext);
+  const navigate = useNavigate();
   const [listUser, setListUser] = useState<UserType[]>([]);
   const [resetTime, setRestTime] = useState<number>(0);
   const { user } = useContext(UserContext);
@@ -54,11 +56,16 @@ const Vong2 = () => {
     socket.on("showResultServer2", (msg: AnserDetailType[]) => {
       setListAnswer([...msg]);
     });
+
+    socket.on("nextServer3", (msg: AnserDetailType[]) => {
+      navigate("/vong/3/user");
+    });
+
     return () => {
       socket.off("listUserServer2");
       socket.off("quesGame1Server");
     };
-  }, [socket]);
+  }, [socket, navigate]);
 
   const handleSubmit = () => {
     if (user?.id) {

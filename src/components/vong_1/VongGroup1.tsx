@@ -7,10 +7,12 @@ import { UserType } from "../../context/UserContext";
 import { INIT_QUESTION } from "../../constants/constants";
 import { QuestionType } from "../../types/Login";
 import { UserContext } from "./../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const VongGroup1 = () => {
   const { socket } = useContext(SocketContext);
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
   const [listUser, setListUser] = useState<UserType[]>([]);
   const [resetTime, setRestTime] = useState<number>(0);
   const [idPress, setIdPress] = useState<number>(0);
@@ -32,22 +34,29 @@ const VongGroup1 = () => {
       console.log(msg);
       setListUser([...msg]);
     });
+
     socket.on("quesGame1Server", (msg: any) => {
       setNumberQuestion({ ...msg });
     });
+
     socket.on("startTimeServer", (msg: UserType[]) => {
       console.log(msg);
       setIdPress(0);
       setRestTime((pre) => pre + 1);
     });
+
     socket.on("pressRung1Server", (msg: number) => {
       setIdPress(msg);
     });
+    socket.on("nextServer2", (msg: number) => {
+      navigate("/vong/2/user");
+    });
+
     return () => {
       socket.off("listUserServer");
       socket.off("quesGame1Server");
     };
-  }, [socket]);
+  }, [socket, navigate]);
 
   return (
     <div className="flex flex-col justify-end gap-8 h-screen p-10">

@@ -12,9 +12,11 @@ import {
 import { AnserDetailType, AnswerType, QuestionType } from "../../types/Login";
 
 import ShowPoint from "./ShowPoint";
+import { useNavigate } from "react-router-dom";
 
 const Vong3 = () => {
   const { socket } = useContext(SocketContext);
+  const navigate = useNavigate();
   const [listUser, setListUser] = useState<UserType[]>([]);
   const [resetTime, setRestTime] = useState<number>(0);
   const { user } = useContext(UserContext);
@@ -32,9 +34,7 @@ const Vong3 = () => {
       setListUser([...msg]);
       setListAnswer([]);
     });
-    // socket.on("listQuestionServer2", (msg: QuestionType2[]) => {
-    //   setListQuestion([...msg]);
-    // });
+
     socket.on("questionServer3", (msg: QuestionType) => {
       console.log(msg);
       setNumberQuestion({ ...msg });
@@ -51,9 +51,9 @@ const Vong3 = () => {
       setRestTime(0);
     });
 
-    // socket.on("showResultServer3", (msg: AnserDetailType[]) => {
-    //   setListAnswer([...msg]);
-    // });
+    socket.on("nextServer4", (msg: string) => {
+      navigate("/vong/4/user");
+    });
     return () => {
       socket.off("listUserServer2");
       socket.off("quesGame1Server");

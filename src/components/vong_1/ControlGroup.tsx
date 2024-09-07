@@ -1,12 +1,14 @@
-import { Button, Card } from "antd";
+import { Button, Card, Popconfirm } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import { UserType } from "../../context/UserContext";
 import { QuestionType, UpdateScoreType } from "../../types/Login";
 import { INIT_QUESTION } from "../../constants/constants";
+import { useNavigate } from "react-router-dom";
 
 const ControlGroup = () => {
   const { socket } = useContext(SocketContext);
+  const navigate = useNavigate();
   const [listUser, setListUser] = useState<UserType[]>([]);
   const [numberQuestion, setNumberQuestion] =
     useState<QuestionType>(INIT_QUESTION);
@@ -24,6 +26,11 @@ const ControlGroup = () => {
 
   const handleStart = () => {
     socket.emit("startControl", "Start");
+  };
+
+  const handleNextGame = () => {
+    socket.emit("next2", "next2");
+    navigate("/vong/2/control");
   };
 
   useEffect(() => {
@@ -52,10 +59,18 @@ const ControlGroup = () => {
       <div className="flex gap-3 flex-col">
         <div>
           <p>Danh sách thí sinh</p>
-          <Button onClick={handleGetListUser}>Lấy danh sách thí sinh</Button>
-          <Button onClick={() => handleNextQuestion(numberQuestion.id + 1)}>
-            Lấy câu hỏi
-          </Button>
+          <div className="flex gap-3">
+            <Button onClick={handleGetListUser}>Lấy danh sách thí sinh</Button>
+            <Button onClick={() => handleNextQuestion(numberQuestion.id + 1)}>
+              Lấy câu hỏi
+            </Button>
+            <Popconfirm
+              title="Bạn có muốn chuyển qua vòng 2 không ?"
+              onConfirm={handleNextGame}
+            >
+              <Button>Chuyển qua vòng 2</Button>
+            </Popconfirm>
+          </div>
         </div>
         <div className=" flex items-center gap-6">
           <div className="flex items-center gap-2 flex-col">

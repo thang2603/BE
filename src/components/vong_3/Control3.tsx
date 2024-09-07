@@ -1,10 +1,11 @@
-import { Button, Card, Input, Table } from "antd";
+import { Button, Card, Input, Popconfirm, Table } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import { UserType, UserUpdateType } from "../../context/UserContext";
 import { QuestionType, QuestionType2 } from "../../types/Login";
 import { INIT_QUESTION } from "../../constants/constants";
 import { convertScore, onChangeData } from "../../constants/until";
+import { useNavigate } from "react-router-dom";
 
 const Control3 = () => {
   const { socket } = useContext(SocketContext);
@@ -12,9 +13,10 @@ const Control3 = () => {
   const [listQuestion, setListQuestion] = useState<QuestionType2[]>([]);
   const [numberQuestion, setNumberQuestion] =
     useState<QuestionType>(INIT_QUESTION);
+
+  const navigate = useNavigate();
   useEffect(() => {
     socket.on("listUserServer3", (msg: UserType[]) => {
-      console.log(msg);
       const newData = convertScore(msg);
       setListUser(newData);
     });
@@ -22,14 +24,18 @@ const Control3 = () => {
       setListQuestion([...msg]);
     });
     socket.on("questionServer3", (msg: QuestionType) => {
-      console.log(msg);
       setNumberQuestion({ ...msg });
     });
 
     return () => {
       socket.off("listUserServer3");
     };
-  }, []);
+  }, [socket]);
+
+  const handleNextGame4 = () => {
+    socket.emit("next4", "next4");
+    navigate("/vong/4/control");
+  };
 
   const handleGetListUser = () => {
     socket.emit("listUser3", "admin");
@@ -105,7 +111,7 @@ const Control3 = () => {
         </div>
         <div className="flex gap-3 flex-col">
           <div>
-            <div className="flex gap-6">
+            <div className="flex gap-4">
               <Button onClick={handleGetListUser}>
                 Lấy danh sách thí sinh
               </Button>
@@ -115,6 +121,12 @@ const Control3 = () => {
                 Hiện thị câu trả lời của thí sinh
               </Button>
               <Button onClick={updateScore}>Cập nhật</Button>
+              <Popconfirm
+                title="Bạn có muốn chuyển qua vòng 4 không ?"
+                onConfirm={handleNextGame4}
+              >
+                <Button>Chuyển qua vòng 4</Button>
+              </Popconfirm>
             </div>
             <p>Danh sách thí sinh</p>
           </div>
@@ -124,9 +136,6 @@ const Control3 = () => {
                 <Button
                   onClick={() => handleGetQuestion(item.no)}
                 >{`Câu hỏi số ${item.id}`}</Button>
-                {/* <Button
-                  onClick={() => handleShowImage(item.id)}
-                >{`Hiện thị câu trả lời ${item.id}`}</Button> */}
               </div>
             ))}
           </div>
