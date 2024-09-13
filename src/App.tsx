@@ -17,6 +17,8 @@ import { useContext } from "react";
 import { UserContext } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import PageQuestion from "./components/CreateQuestion/PageQuestion";
+import Question1 from "./components/CreateQuestion/Question1";
+import Question2 from "./components/CreateQuestion/Question2";
 
 function App() {
   const { user } = useContext(UserContext);
@@ -25,7 +27,10 @@ function App() {
       <div></div>
       <Routes>
         <Route path="login" element={<Login />} />
-        <Route path="create" element={<PageQuestion />}></Route>
+        <Route path="create">
+          <Route path="1" element={<Question1 />}></Route>
+          <Route path="2" element={<Question2 />}></Route>
+        </Route>
         <Route path="vong/1">
           <Route
             path="control"

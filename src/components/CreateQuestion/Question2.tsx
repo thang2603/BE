@@ -12,38 +12,48 @@ import {
 } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
-import { QuestionType } from "../../types/Login";
+import { QuestionType, QuestionType2 } from "../../types/Login";
 
 import { DefaultOptionType } from "antd/es/select";
 import { UserType } from "../../context/UserContext";
 import { convertOption } from "../../constants/until";
 import { QuestionTypeBody } from "./../../types/Login";
-import { INIT_QUESTION_BODY } from "../../constants/constants";
 
+const INIT_QUESTION_2: QuestionType2 = {
+  id: 0,
+  ans: "",
+  ques: "",
+  type: 1,
+  no: 0,
+  isActive: 0,
+};
+
+const OPTION_TYPE_QUESTION = [
+  {
+    value: 1,
+    label: "Câu hỏi chữ",
+  },
+  {
+    value: 2,
+    label: "Câu hỏi âm thanh",
+  },
+];
 const Question2 = () => {
   const { socket } = useContext(SocketContext);
-  const [listQuestion, setListQuestion] = useState<QuestionType[]>([]);
+  const [listQuestion, setListQuestion] = useState<QuestionType2[]>([]);
   const [listUser, setListUser] = useState<DefaultOptionType[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [dataDetail, setDataDetail] = useState<QuestionType>({
-    id: 0,
-    ans: "",
-    ques: "",
-    idUser: 0,
-    no: 0,
-    quantity: 0,
-    score: 0,
-  });
+  const [dataDetail, setDataDetail] = useState<QuestionType2>(INIT_QUESTION_2);
   const [questionBody, setQuestionBody] =
-    useState<QuestionTypeBody>(INIT_QUESTION_BODY);
+    useState<QuestionType2>(INIT_QUESTION_2);
 
   useEffect(() => {
-    socket.emit("getAllQuestion", "getAllQuestion");
+    socket.emit("getAllQuestion2", "getAllQuestion2");
     socket.emit("listUser", "listUser");
     socket.on("listUserServer", (msg: UserType[]) => {
       setListUser(convertOption(msg, "id", "fullName"));
     });
-    socket.on("getAllQuestionServer1", (msg: QuestionType[]) => {
+    socket.on("getAllQuestionServer2", (msg: QuestionType2[]) => {
       if (isOpenModal) handleCloseModal();
       setListQuestion([...msg]);
     });
@@ -54,23 +64,17 @@ const Question2 = () => {
     };
   }, [socket]);
 
-  const onChangeData = (
-    value: string | number,
-    field: keyof QuestionTypeBody
-  ) => {
+  const onChangeData = (value: string | number, field: keyof QuestionType2) => {
     setQuestionBody((pre) => ({ ...pre, [field]: value }));
   };
 
   const onChangeDataEdit = (
     value: string | number,
-    field: keyof QuestionType
+    field: keyof QuestionType2
   ) => {
     setDataDetail((pre) => ({ ...pre, [field]: value }));
   };
-  const handleSubmit = (
-    value: QuestionTypeBody | QuestionType,
-    key: string
-  ) => {
+  const handleSubmit = (value: QuestionType2, key: string) => {
     const check = handleCheckQuestion(value);
     if (check) {
       message.warning("Vui lòng điền đầy đủ thông tin câu hỏi");
@@ -79,14 +83,14 @@ const Question2 = () => {
     }
   };
 
-  const handleCheckQuestion = (value: QuestionTypeBody) => {
+  const handleCheckQuestion = (value: QuestionType2) => {
     const check = Object.keys(value).find(
-      (item) => !!value?.[item as keyof QuestionTypeBody] === false
+      (item) => !!value?.[item as keyof QuestionType2] === false
     );
     return !!check;
   };
 
-  const handleOpenDetail = (value: QuestionType) => {
+  const handleOpenDetail = (value: QuestionType2) => {
     setIsOpenModal(true);
     setDataDetail(value);
   };
@@ -97,7 +101,7 @@ const Question2 = () => {
   const handleDeleteQuestion = (idQues: number) => {
     socket.emit("deleteQuestion1", idQues);
   };
-  const columns: TableProps<QuestionType>["columns"] = [
+  const columns: TableProps<QuestionType2>["columns"] = [
     {
       title: "STT",
       dataIndex: "id",
@@ -116,9 +120,11 @@ const Question2 = () => {
       key: "ans",
     },
     {
-      title: "Thí sinh",
-      dataIndex: "fullName",
-      key: "fullName",
+      title: "Thể loại câu hỏi",
+      dataIndex: "type",
+      key: "type",
+      render: (text) => <span>{text}</span>,
+      width: 150,
     },
     {
       title: "Số thự tự câu hỏi",
@@ -171,10 +177,10 @@ const Question2 = () => {
             onChange={(e) => onChangeData(Number(e.target.value), "no")}
           ></Input>
         </Form.Item>
-        <Form.Item label="Thí sinh" className="flex-1">
+        <Form.Item label="Thể loại" className="flex-1">
           <Select
-            options={listUser}
-            onChange={(e) => onChangeData(e, "idUser")}
+            options={OPTION_TYPE_QUESTION}
+            onChange={(e) => onChangeData(e, "type")}
           ></Select>
         </Form.Item>
         <Form.Item label="" className="flex-1 flex justify-center">
@@ -186,11 +192,13 @@ const Question2 = () => {
           </Button>
         </Form.Item>
       </Form>
-      <Table columns={columns} dataSource={listQuestion} />
+      <Table columns={columns} dataSource={listQuestion} bordered />
 
       <Modal
         open={isOpenModal}
-        onOk={() => handleSubmit(dataDetail as QuestionType, "updateQuestion1")}
+        onOk={() =>
+          handleSubmit(dataDetail as QuestionType2, "updateQuestion1")
+        }
       >
         <Form
           name="basic"
@@ -221,11 +229,11 @@ const Question2 = () => {
               onChange={(e) => onChangeDataEdit(Number(e.target.value), "no")}
             ></Input>
           </Form.Item>
-          <Form.Item label="Thí sinh" className="flex-1">
+          <Form.Item label="Thể loại" className="flex-1">
             <Select
-              value={dataDetail?.idUser}
+              value={dataDetail?.type}
               options={listUser}
-              onChange={(e) => onChangeDataEdit(e, "idUser")}
+              onChange={(e) => onChangeDataEdit(e, "type")}
             ></Select>
           </Form.Item>
         </Form>
