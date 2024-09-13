@@ -1,4 +1,8 @@
-import { QuestionFourType, QuestionType } from "../types/Login";
+import {
+  QuestionFourType,
+  QuestionType,
+  QuestionTypeBody,
+} from "../types/Login";
 import image1 from "../assets/vong3/cau1.png";
 import image2 from "../assets/vong3/cau2.png";
 import image3 from "../assets/vong3/cau3.png";
@@ -9,13 +13,19 @@ export const INIT_QUESTION: QuestionType = {
   ques: "",
   ans: "",
   quantity: 0,
-  game: 1,
+
   no: 0,
   idUser: 0,
   score: 0,
   type: 0,
 };
 
+export const INIT_QUESTION_BODY: QuestionTypeBody = {
+  ques: "",
+  ans: "",
+  no: 1,
+  idUser: 0,
+};
 export const listImageGame3 = [
   {
     id: 1,

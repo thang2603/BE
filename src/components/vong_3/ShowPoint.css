@@ -1,0 +1,16 @@
+/* Định nghĩa animation */
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Class áp dụng animation */
+.slide-up {
+  animation: slideUp 1s ease-out forwards; /* 0.5s là thời gian của animation, bạn có thể điều chỉnh */
+}

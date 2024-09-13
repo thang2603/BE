@@ -33,6 +33,11 @@ const Control2 = () => {
     };
   }, [socket]);
 
+  // useEffect(() => {
+  //   socket.emit("listUser2", "admin");
+  //   socket.emit("listQuestion2", "admin");
+  // }, [socket]);
+
   const handleNextGame3 = () => {
     socket.emit("next3", "next3");
     navigate("/vong/3/control");

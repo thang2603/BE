@@ -16,6 +16,7 @@ import Control4 from "./components/vong_4/Control4";
 import { useContext } from "react";
 import { UserContext } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import PageQuestion from "./components/CreateQuestion/PageQuestion";
 
 function App() {
   const { user } = useContext(UserContext);
@@ -24,6 +25,7 @@ function App() {
       <div></div>
       <Routes>
         <Route path="login" element={<Login />} />
+        <Route path="create" element={<PageQuestion />}></Route>
         <Route path="vong/1">
           <Route
             path="control"

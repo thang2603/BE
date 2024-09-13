@@ -96,8 +96,15 @@ const Vong2 = () => {
               {Timer}
             </CountdownCircleTimer>
             <div className="flex  gap-6 min-w-[1000px]">
-              <Card title={`Câu hỏi ${numberQuestion.no}`} className="flex-1">
-                <p>{numberQuestion.ques}</p>
+              <Card
+                title={
+                  <p className="text-white">{`Câu hỏi ${numberQuestion.no}`}</p>
+                }
+                className="flex-1 bg-sky-800 "
+              >
+                <p className="text-white font-semibold">
+                  {numberQuestion.ques}
+                </p>
               </Card>
               <div className="min-w-96 flex flex-col gap-2">
                 {listUser.map((item) => (
@@ -111,7 +118,7 @@ const Vong2 = () => {
                           }
                         : {}
                     }
-                    className="flex gap-2 items-center justify-between bg-white rounded-md p-2"
+                    className="flex gap-2 items-center justify-between bg-sky-800 text-white rounded-md p-2"
                   >
                     <p className="font-semibold">{item.fullName}</p>
                     <p className="w-7 font-semibold">{item?.score}</p>

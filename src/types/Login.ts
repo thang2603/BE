@@ -10,11 +10,17 @@ export interface QuestionType {
   ques: string;
   ans: string;
   quantity: number;
-  game: number;
   no: number;
   idUser: number;
   score: number;
   type?: number;
+}
+
+export interface QuestionTypeBody {
+  ques: string;
+  ans: string;
+  no: number;
+  idUser: number;
 }
 
 export interface QuestionType2 {

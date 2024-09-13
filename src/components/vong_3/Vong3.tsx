@@ -58,7 +58,7 @@ const Vong3 = () => {
       socket.off("listUserServer2");
       socket.off("quesGame1Server");
     };
-  }, [socket]);
+  }, [socket, navigate]);
 
   const handleSubmit = () => {
     if (user?.id) {
