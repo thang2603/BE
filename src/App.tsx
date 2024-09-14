@@ -19,24 +19,66 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import PageQuestion from "./components/CreateQuestion/PageQuestion";
 import Question1 from "./components/CreateQuestion/Question1";
 import Question2 from "./components/CreateQuestion/Question2";
+import Question3 from "./components/CreateQuestion/Question3";
+import Question4 from "./components/CreateQuestion/Question4";
+import CreateUser from "./components/CreateQuestion/CreateUser";
 
 function App() {
   const { user } = useContext(UserContext);
   return (
     <DefaultLayout>
-      <div></div>
       <Routes>
         <Route path="login" element={<Login />} />
+        <Route
+          path="createUser"
+          element={
+            <PageQuestion>
+              <CreateUser />
+            </PageQuestion>
+          }
+        ></Route>
         <Route path="create">
-          <Route path="1" element={<Question1 />}></Route>
-          <Route path="2" element={<Question2 />}></Route>
+          <Route
+            path="1"
+            element={
+              <PageQuestion>
+                <Question1 />
+              </PageQuestion>
+            }
+          ></Route>
+          <Route
+            path="2"
+            element={
+              <PageQuestion>
+                <Question2 />
+              </PageQuestion>
+            }
+          ></Route>
+          <Route
+            path="3"
+            element={
+              <PageQuestion>
+                <Question3 />
+              </PageQuestion>
+            }
+          ></Route>
+          <Route
+            path="4"
+            element={
+              <PageQuestion>
+                <Question4 />
+              </PageQuestion>
+            }
+          ></Route>
         </Route>
         <Route path="vong/1">
           <Route
             path="control"
             element={
               <ProtectedRoute isAuth={user?.id}>
-                <Control1 />
+                <PageQuestion>
+                  <Control1 />
+                </PageQuestion>
               </ProtectedRoute>
             }
           />
@@ -54,7 +96,9 @@ function App() {
             path="control"
             element={
               <ProtectedRoute isAuth={user?.id}>
-                <ControlGroup />
+                <PageQuestion>
+                  <ControlGroup />
+                </PageQuestion>
               </ProtectedRoute>
             }
           />
@@ -80,7 +124,9 @@ function App() {
             path="control"
             element={
               <ProtectedRoute isAuth={user?.id}>
-                <Control2 />
+                <PageQuestion>
+                  <Control2 />
+                </PageQuestion>
               </ProtectedRoute>
             }
           />
@@ -98,7 +144,9 @@ function App() {
             path="control"
             element={
               <ProtectedRoute isAuth={user?.id}>
-                <Control3 />
+                <PageQuestion>
+                  <Control3 />
+                </PageQuestion>
               </ProtectedRoute>
             }
           />
@@ -116,7 +164,9 @@ function App() {
             path="control"
             element={
               <ProtectedRoute isAuth={user?.id}>
-                <Control4 />
+                <PageQuestion>
+                  <Control4 />
+                </PageQuestion>
               </ProtectedRoute>
             }
           />

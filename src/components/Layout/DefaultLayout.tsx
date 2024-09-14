@@ -1,5 +1,5 @@
 const DefaultLayout = ({ children }: any) => {
-  return <div>{children}</div>;
+  return <div className="p-7">{children}</div>;
 };
 
 export default DefaultLayout;

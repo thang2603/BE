@@ -12,7 +12,12 @@ export interface UserType {
   id: number;
   score: number;
 }
-
+export interface UserTypeBody {
+  fullName: string;
+  password: string;
+  role: string;
+  id: number;
+}
 export interface UserUpdateType {
   fullName: string;
   password: string;

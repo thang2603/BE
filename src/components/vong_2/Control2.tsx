@@ -33,11 +33,6 @@ const Control2 = () => {
     };
   }, [socket]);
 
-  // useEffect(() => {
-  //   socket.emit("listUser2", "admin");
-  //   socket.emit("listQuestion2", "admin");
-  // }, [socket]);
-
   const handleNextGame3 = () => {
     socket.emit("next3", "next3");
     navigate("/vong/3/control");
@@ -122,11 +117,11 @@ const Control2 = () => {
             {listQuestion.map((item) => (
               <div className="flex flex-col gap-3">
                 <Button
-                  onClick={() => handleGetQuestion(item.id)}
-                >{`Câu hỏi số ${item.id}`}</Button>
+                  onClick={() => handleGetQuestion(item.no)}
+                >{`Câu hỏi số ${item.no}`}</Button>
                 <Button
-                  onClick={() => handleShowImage(item.id)}
-                >{`Hiện thị câu trả lời ${item.id}`}</Button>
+                  onClick={() => handleShowImage(item.no)}
+                >{`Hiện thị câu trả lời ${item.no}`}</Button>
               </div>
             ))}
           </div>

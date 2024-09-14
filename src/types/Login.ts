@@ -22,6 +22,13 @@ export interface QuestionTypeBody {
   no: number;
   idUser: number;
 }
+export interface QuestionTypeBody4 {
+  id?: number;
+  ques: string;
+  ans: string;
+  idUser: number;
+  score: number;
+}
 
 export interface QuestionType2 {
   id: number;
@@ -30,6 +37,14 @@ export interface QuestionType2 {
   no: number;
   type: number;
   isActive: number;
+}
+
+export interface QuestionType3 {
+  id: number;
+  ques: string;
+  ans: string;
+  no: number;
+  type: number;
 }
 export interface NumberQuestionType {
   idUser: number;

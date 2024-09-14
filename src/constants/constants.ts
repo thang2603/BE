@@ -2,6 +2,7 @@ import {
   QuestionFourType,
   QuestionType,
   QuestionTypeBody,
+  QuestionTypeBody4,
 } from "../types/Login";
 import image1 from "../assets/vong3/cau1.png";
 import image2 from "../assets/vong3/cau2.png";
@@ -26,6 +27,23 @@ export const INIT_QUESTION_BODY: QuestionTypeBody = {
   no: 1,
   idUser: 0,
 };
+export const INIT_QUESTION_BODY_4: QuestionTypeBody4 = {
+  ques: "",
+  ans: "",
+  idUser: 0,
+  score: 20,
+};
+
+export const INIT_SCORE_4 = [
+  {
+    value: 20,
+    label: "Gói 20 điểm",
+  },
+  {
+    value: 30,
+    label: "Gói 30 điểm",
+  },
+];
 export const listImageGame3 = [
   {
     id: 1,
