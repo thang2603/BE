@@ -1,6 +1,7 @@
 import {
   Button,
   Card,
+  Checkbox,
   Form,
   Input,
   message,
@@ -12,19 +13,14 @@ import {
 } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
-import { QuestionType, QuestionType2 } from "../../types/Login";
-
-import { DefaultOptionType } from "antd/es/select";
-import { UserType } from "../../context/UserContext";
-import { convertOption } from "../../constants/until";
-import { QuestionTypeBody } from "./../../types/Login";
+import { QuestionType2 } from "../../types/Login";
 
 const INIT_QUESTION_2: QuestionType2 = {
-  id: 0,
+  id: 1,
   ans: "",
   ques: "",
   type: 1,
-  no: 0,
+  no: 1,
   isActive: 0,
 };
 
@@ -41,7 +37,7 @@ const OPTION_TYPE_QUESTION = [
 const Question2 = () => {
   const { socket } = useContext(SocketContext);
   const [listQuestion, setListQuestion] = useState<QuestionType2[]>([]);
-  const [listUser, setListUser] = useState<DefaultOptionType[]>([]);
+
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [dataDetail, setDataDetail] = useState<QuestionType2>(INIT_QUESTION_2);
   const [questionBody, setQuestionBody] =
@@ -50,11 +46,9 @@ const Question2 = () => {
   useEffect(() => {
     socket.emit("getAllQuestion2", "getAllQuestion2");
     socket.emit("listUser", "listUser");
-    socket.on("listUserServer", (msg: UserType[]) => {
-      setListUser(convertOption(msg, "id", "fullName"));
-    });
+
     socket.on("getAllQuestionServer2", (msg: QuestionType2[]) => {
-      if (isOpenModal) handleCloseModal();
+      handleCloseModal();
       setListQuestion([...msg]);
     });
 
@@ -85,7 +79,8 @@ const Question2 = () => {
 
   const handleCheckQuestion = (value: QuestionType2) => {
     const check = Object.keys(value).find(
-      (item) => !!value?.[item as keyof QuestionType2] === false
+      (item) =>
+        item !== "isActive" && !!value?.[item as keyof QuestionType2] === false
     );
     return !!check;
   };
@@ -98,17 +93,16 @@ const Question2 = () => {
   const handleCloseModal = () => {
     setIsOpenModal(false);
   };
+
   const handleDeleteQuestion = (idQues: number) => {
-    socket.emit("deleteQuestion1", idQues);
+    socket.emit("deleteQuestion2", idQues);
+  };
+  const handlecheckedType = (value: boolean) => {
+    const tempData: number = value ? 1 : 0;
+
+    onChangeDataEdit(tempData, "isActive");
   };
   const columns: TableProps<QuestionType2>["columns"] = [
-    {
-      title: "STT",
-      dataIndex: "id",
-      key: "id",
-      render: (text) => <span>{text}</span>,
-      width: 100,
-    },
     {
       title: "Câu hỏi",
       dataIndex: "ques",
@@ -125,6 +119,13 @@ const Question2 = () => {
       key: "type",
       render: (text) => <span>{text}</span>,
       width: 150,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "isActive",
+      key: "isActive",
+      width: 150,
+      render: (text) => <span>{!!text ? "Mở" : "Đóng"} </span>,
     },
     {
       title: "Số thự tự câu hỏi",
@@ -172,7 +173,7 @@ const Question2 = () => {
         <Form.Item label="Câu hỏi số" className="flex-1">
           <Input
             type="number"
-            max={6}
+            max={5}
             min={1}
             onChange={(e) => onChangeData(Number(e.target.value), "no")}
           ></Input>
@@ -186,7 +187,7 @@ const Question2 = () => {
         <Form.Item label="" className="flex-1 flex justify-center">
           <Button
             className="w-48"
-            onClick={() => handleSubmit(questionBody, "createQuestion1")}
+            onClick={() => handleSubmit(questionBody, "createQuestion2")}
           >
             Tạo câu hỏi
           </Button>
@@ -197,8 +198,9 @@ const Question2 = () => {
       <Modal
         open={isOpenModal}
         onOk={() =>
-          handleSubmit(dataDetail as QuestionType2, "updateQuestion1")
+          handleSubmit(dataDetail as QuestionType2, "updateQuestion2")
         }
+        onCancel={handleCloseModal}
       >
         <Form
           name="basic"
@@ -224,7 +226,7 @@ const Question2 = () => {
             <Input
               value={dataDetail?.no}
               type="number"
-              max={6}
+              max={5}
               min={1}
               onChange={(e) => onChangeDataEdit(Number(e.target.value), "no")}
             ></Input>
@@ -232,9 +234,15 @@ const Question2 = () => {
           <Form.Item label="Thể loại" className="flex-1">
             <Select
               value={dataDetail?.type}
-              options={listUser}
+              options={OPTION_TYPE_QUESTION}
               onChange={(e) => onChangeDataEdit(e, "type")}
             ></Select>
+          </Form.Item>
+          <Form.Item label="Trạng thái" className="flex-1">
+            <Checkbox
+              checked={!!dataDetail?.isActive}
+              onChange={(e) => handlecheckedType(e.target.checked)}
+            />
           </Form.Item>
         </Form>
       </Modal>
