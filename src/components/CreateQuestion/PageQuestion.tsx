@@ -1,16 +1,23 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useContext, useEffect } from "react";
 
 import { Button, Card } from "antd";
 import { useNavigate } from "react-router-dom";
+import { SocketContext } from "../../context/SocketContext";
 
 interface DataTypeProps {
   children: ReactNode;
 }
 const PageQuestion = ({ children }: DataTypeProps) => {
   const navigate = useNavigate();
+  const { socket } = useContext(SocketContext);
   const handleNavigate = (url: string) => {
     navigate(url);
   };
+
+  const handleNextWaitScreen = () => {
+    socket.emit("nextWaitScreen");
+  };
+
   return (
     <div className="flex flex-col gap-3">
       <Card>
@@ -19,7 +26,7 @@ const PageQuestion = ({ children }: DataTypeProps) => {
             <Button onClick={() => handleNavigate("/create/1")}>
               Tạo câu hỏi vòng 1 thi riêng
             </Button>
-            <Button onClick={() => handleNavigate("/create/4")}>
+            <Button onClick={() => handleNavigate("/create/group/1")}>
               Tạo câu hỏi vòng 1 thi chung
             </Button>
             <Button onClick={() => handleNavigate("/create/2")}>
@@ -50,6 +57,9 @@ const PageQuestion = ({ children }: DataTypeProps) => {
             </Button>
             <Button onClick={() => handleNavigate("/vong/4/control")}>
               Kĩ thuật vòng 4
+            </Button>
+            <Button onClick={handleNextWaitScreen}>
+              Chuyển qua màn hình chờ
             </Button>
           </div>
         </div>

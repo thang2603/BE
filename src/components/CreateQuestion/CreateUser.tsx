@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
-import { INIT_USER, UserType, UserTypeBody } from "../../context/UserContext";
+import { UserType, UserTypeBody } from "../../context/UserContext";
 import {
   Button,
   Card,

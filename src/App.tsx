@@ -1,6 +1,6 @@
 import "./App.css";
 
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./components/login/Login";
 import Vong1 from "./components/vong_1/Vong1";
 import DefaultLayout from "./components/Layout/DefaultLayout";
@@ -22,13 +22,17 @@ import Question2 from "./components/CreateQuestion/Question2";
 import Question3 from "./components/CreateQuestion/Question3";
 import Question4 from "./components/CreateQuestion/Question4";
 import CreateUser from "./components/CreateQuestion/CreateUser";
+import QuestionGroup1 from "./components/CreateQuestion/QuestionGroup1";
+import WaitScreen from "./components/common/WaitScreen";
 
 function App() {
   const { user } = useContext(UserContext);
   return (
     <DefaultLayout>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="login" element={<Login />} />
+        <Route path="wait-screen" element={<WaitScreen />} />
         <Route
           path="createUser"
           element={
@@ -43,6 +47,14 @@ function App() {
             element={
               <PageQuestion>
                 <Question1 />
+              </PageQuestion>
+            }
+          ></Route>
+          <Route
+            path="group/1"
+            element={
+              <PageQuestion>
+                <QuestionGroup1 />
               </PageQuestion>
             }
           ></Route>

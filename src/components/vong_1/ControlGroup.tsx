@@ -5,15 +5,16 @@ import { UserType } from "../../context/UserContext";
 import { QuestionType, UpdateScoreType } from "../../types/Login";
 import { INIT_QUESTION } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
-
+const listQuestion = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const ControlGroup = () => {
   const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
   const [listUser, setListUser] = useState<UserType[]>([]);
   const [numberQuestion, setNumberQuestion] =
     useState<QuestionType>(INIT_QUESTION);
+
   const handleGetListUser = () => {
-    socket.emit("listUser", "admin");
+    socket.emit("listUserAndScore", "admin");
   };
 
   const handleNextQuestion = (noQues: number) => {
@@ -34,7 +35,8 @@ const ControlGroup = () => {
   };
 
   useEffect(() => {
-    socket.on("listUserServer", (msg: UserType[]) => {
+    socket.emit("listUserAndScore", "admin");
+    socket.on("listUserAndScoreServer", (msg: UserType[]) => {
       console.log(msg);
       setListUser([...msg]);
     });
@@ -61,9 +63,6 @@ const ControlGroup = () => {
           <p>Danh sách thí sinh</p>
           <div className="flex gap-3">
             <Button onClick={handleGetListUser}>Lấy danh sách thí sinh</Button>
-            <Button onClick={() => handleNextQuestion(numberQuestion.id + 1)}>
-              Lấy câu hỏi
-            </Button>
             <Popconfirm
               title="Bạn có muốn chuyển qua vòng 2 không ?"
               onConfirm={handleNextGame}
@@ -71,6 +70,13 @@ const ControlGroup = () => {
               <Button>Chuyển qua vòng 2</Button>
             </Popconfirm>
           </div>
+        </div>
+        <div className="flex flex-wrap gap-3 ">
+          {listQuestion.map((item) => (
+            <Button onClick={() => handleNextQuestion(item)}>
+              {`Câu hỏi `} {item}
+            </Button>
+          ))}
         </div>
         <div className=" flex items-center gap-6">
           <div className="flex items-center gap-2 flex-col">

@@ -15,7 +15,7 @@ const RowWord = ({ listQuestion }: DataTypeProps) => {
     return "opacity-0";
   };
   return (
-    <div className="px-5 border-2 border-solid border-slate-200 bg-sky-800 relative py-10 ">
+    <div className="px-5 border-2 border-solid border-slate-200 bg-sky-800 relative py-10 min-w-[500px]">
       <p className="absolute bg-cyan-600 text-white -top-4 left-1/2 -translate-x-1/2 text-xl px-1 py-1 border-2 border-solid border-slate-200 ">
         Chướng ngại vật có 7 chữ
       </p>

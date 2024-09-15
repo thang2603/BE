@@ -28,7 +28,11 @@ const Login = () => {
     socket.on("userInfor", (msg: UserType[]) => {
       if (msg?.length > 0) {
         localStorage.setItem("user", JSON.stringify(msg[0]));
-        navigate("/vong/1/user");
+        if (msg[0].role === "ADMIN") {
+          navigate("/vong/1/control");
+        } else {
+          navigate("/vong/1/user");
+        }
         setUser(msg[0]);
       } else {
         message.warning("Tài khoản hoặc mật khẩu không chính xác");

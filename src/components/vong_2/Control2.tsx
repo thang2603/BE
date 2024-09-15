@@ -1,22 +1,35 @@
-import { Button, Card, Popconfirm, Table } from "antd";
+import { Button, Card, Popconfirm, Select, Table } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import { UserType, UserUpdateType } from "../../context/UserContext";
 import { QuestionType, QuestionType2 } from "../../types/Login";
 import { INIT_QUESTION } from "../../constants/constants";
-import { convertScore } from "../../constants/until";
+import { convertScore, onChangeData } from "../../constants/until";
 import { useNavigate } from "react-router-dom";
+import { DefaultOptionType } from "antd/es/select";
 
+const OPTION_SCORE_2: DefaultOptionType[] = [
+  {
+    value: 0,
+    label: "0 điểm",
+  },
+  {
+    value: 10,
+    label: "10 Điểm",
+  },
+];
 const Control2 = () => {
   const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
   const [listUser, setListUser] = useState<UserUpdateType[]>([]);
   const [listQuestion, setListQuestion] = useState<QuestionType2[]>([]);
+
   const [numberQuestion, setNumberQuestion] =
     useState<QuestionType>(INIT_QUESTION);
   useEffect(() => {
+    socket.emit("listUser2", "admin");
+    socket.emit("listQuestion2", "admin");
     socket.on("listUserServer2", (msg: UserType[]) => {
-      console.log(msg);
       const newData = convertScore(msg);
       setListUser(newData);
     });
@@ -50,9 +63,8 @@ const Control2 = () => {
     socket.emit("startControl2", "Start");
   };
 
-  const updateScore = (itemUser: UserUpdateType) => {
-    const newData: UserUpdateType = { ...itemUser, updateScore: 10 };
-    socket.emit("updateScore2", newData);
+  const updateScore = () => {
+    socket.emit("updateScore2", listUser);
   };
 
   const handleShowResult = () => {
@@ -62,7 +74,10 @@ const Control2 = () => {
   const handleShowImage = (id: number) => {
     socket.emit("showImage2", id);
   };
-
+  const handleChangeData = (idUser: number, value: number) => {
+    const newData = onChangeData(listUser, idUser, value);
+    setListUser(newData);
+  };
   const columns = [
     {
       title: "Họ và tên",
@@ -74,12 +89,18 @@ const Control2 = () => {
       dataIndex: "score",
       key: "score",
     },
+
     {
       title: "Hành động",
       dataIndex: "address",
       key: "address",
       render: (text: string, record: UserUpdateType) => (
-        <Button onClick={() => updateScore(record)}>Cập nhật</Button>
+        <Select
+          value={record?.updateScore}
+          options={OPTION_SCORE_2}
+          className="w-32"
+          onChange={(e) => handleChangeData(record?.id, e)}
+        />
       ),
     },
   ];
@@ -104,6 +125,7 @@ const Control2 = () => {
               <Button onClick={handleShowResult}>
                 Hiện thị câu trả lời của thí sinh
               </Button>
+              <Button onClick={updateScore}>Cập nhật điểm</Button>
               <Popconfirm
                 title="Bạn có muốn chuyển qua vòng 3 không ?"
                 onConfirm={handleNextGame3}

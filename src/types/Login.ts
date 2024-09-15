@@ -16,6 +16,13 @@ export interface QuestionType {
   type?: number;
 }
 
+export interface QuestionGroupType {
+  id: number;
+  ques: string;
+  ans: string;
+  no: number;
+}
+
 export interface QuestionTypeBody {
   ques: string;
   ans: string;

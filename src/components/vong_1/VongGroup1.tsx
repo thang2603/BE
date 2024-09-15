@@ -30,17 +30,16 @@ const VongGroup1 = () => {
   };
 
   useEffect(() => {
-    socket.on("listUserServer", (msg: UserType[]) => {
-      console.log(msg);
+    socket.emit("listUserAndScore", "admin");
+    socket.on("listUserAndScoreServer", (msg: UserType[]) => {
       setListUser([...msg]);
     });
 
-    socket.on("quesGame1Server", (msg: any) => {
+    socket.on("questionGroupServer", (msg: any) => {
       setNumberQuestion({ ...msg });
     });
 
     socket.on("startTimeServer", (msg: UserType[]) => {
-      console.log(msg);
       setIdPress(0);
       setRestTime((pre) => pre + 1);
     });
@@ -81,7 +80,7 @@ const VongGroup1 = () => {
       <div className="flex  gap-6 min-w-[1000px]">
         <Card
           title={
-            <span className="text-white font-semibol">{`Câu hỏi ${numberQuestion.id}`}</span>
+            <span className="text-white font-semibol">{`Câu hỏi ${numberQuestion.no}`}</span>
           }
           className="flex-1 bg-sky-800"
         >

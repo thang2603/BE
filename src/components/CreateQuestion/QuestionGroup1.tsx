@@ -6,44 +6,34 @@ import {
   message,
   Modal,
   Popconfirm,
-  Select,
   Table,
   TableProps,
 } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
-import { QuestionType } from "../../types/Login";
-
-import { DefaultOptionType } from "antd/es/select";
-import { UserType } from "../../context/UserContext";
-import { convertOption } from "../../constants/until";
+import { QuestionGroupType, QuestionType } from "../../types/Login";
 import { QuestionTypeBody } from "./../../types/Login";
-import { INIT_QUESTION_BODY } from "../../constants/constants";
 
-const Question1 = () => {
+const QuestionGroup1 = () => {
   const { socket } = useContext(SocketContext);
-  const [listQuestion, setListQuestion] = useState<QuestionType[]>([]);
-  const [listUser, setListUser] = useState<DefaultOptionType[]>([]);
+  const [listQuestion, setListQuestion] = useState<QuestionGroupType[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [dataDetail, setDataDetail] = useState<QuestionType>({
-    id: 0,
+  const [dataDetail, setDataDetail] = useState<QuestionGroupType>({
+    id: 1,
     ans: "",
     ques: "",
-    idUser: 0,
-    no: 0,
-    quantity: 0,
-    score: 0,
+    no: 1,
   });
-  const [questionBody, setQuestionBody] =
-    useState<QuestionTypeBody>(INIT_QUESTION_BODY);
+  const [questionBody, setQuestionBody] = useState<QuestionGroupType>({
+    id: 1,
+    ans: "",
+    ques: "",
+    no: 1,
+  });
 
   useEffect(() => {
-    socket.emit("getAllQuestion", "getAllQuestion");
-    socket.emit("listUser", "listUser");
-    socket.on("listUserServer", (msg: UserType[]) => {
-      setListUser(convertOption(msg, "id", "fullName"));
-    });
-    socket.on("getAllQuestionServer1", (msg: QuestionType[]) => {
+    socket.emit("getAllQuestionGroup1", "getAllQuestionGroup1");
+    socket.on("getAllQuestionGroupServer1", (msg: QuestionType[]) => {
       handleCloseModal();
       setListQuestion([...msg]);
     });
@@ -67,10 +57,7 @@ const Question1 = () => {
   ) => {
     setDataDetail((pre) => ({ ...pre, [field]: value }));
   };
-  const handleSubmit = (
-    value: QuestionTypeBody | QuestionType,
-    key: string
-  ) => {
+  const handleSubmit = (value: QuestionGroupType, key: string) => {
     const check = handleCheckQuestion(value);
     if (check) {
       message.warning("Vui lòng điền đầy đủ thông tin câu hỏi");
@@ -79,14 +66,14 @@ const Question1 = () => {
     }
   };
 
-  const handleCheckQuestion = (value: QuestionTypeBody) => {
+  const handleCheckQuestion = (value: QuestionGroupType) => {
     const check = Object.keys(value).find(
-      (item) => !!value?.[item as keyof QuestionTypeBody] === false
+      (item) => !!value?.[item as keyof QuestionGroupType] === false
     );
     return !!check;
   };
 
-  const handleOpenDetail = (value: QuestionType) => {
+  const handleOpenDetail = (value: QuestionGroupType) => {
     setIsOpenModal(true);
     setDataDetail(value);
   };
@@ -95,9 +82,9 @@ const Question1 = () => {
     setIsOpenModal(false);
   };
   const handleDeleteQuestion = (idQues: number) => {
-    socket.emit("deleteQuestion1", idQues);
+    socket.emit("deleteQuestionGroup1", idQues);
   };
-  const columns: TableProps<QuestionType>["columns"] = [
+  const columns: TableProps<QuestionGroupType>["columns"] = [
     {
       title: "Câu hỏi",
       dataIndex: "ques",
@@ -108,11 +95,7 @@ const Question1 = () => {
       dataIndex: "ans",
       key: "ans",
     },
-    {
-      title: "Thí sinh",
-      dataIndex: "fullName",
-      key: "fullName",
-    },
+
     {
       title: "Số thự tự câu hỏi",
       dataIndex: "no",
@@ -159,21 +142,18 @@ const Question1 = () => {
         <Form.Item label="Câu hỏi số" className="flex-1">
           <Input
             type="number"
-            max={6}
+            max={12}
             min={1}
             onChange={(e) => onChangeData(Number(e.target.value), "no")}
           ></Input>
         </Form.Item>
-        <Form.Item label="Thí sinh" className="flex-1">
-          <Select
-            options={listUser}
-            onChange={(e) => onChangeData(e, "idUser")}
-          ></Select>
-        </Form.Item>
+
         <Form.Item label="" className="flex-1 flex justify-center">
           <Button
             className="w-48"
-            onClick={() => handleSubmit(questionBody, "createQuestion1")}
+            onClick={() =>
+              handleSubmit(questionBody, "createAllQuestionGroup1")
+            }
           >
             Tạo câu hỏi
           </Button>
@@ -190,7 +170,9 @@ const Question1 = () => {
       <Modal
         open={isOpenModal}
         onCancel={handleCloseModal}
-        onOk={() => handleSubmit(dataDetail as QuestionType, "updateQuestion1")}
+        onOk={() =>
+          handleSubmit(dataDetail as QuestionType, "updateAllQuestionGroup1")
+        }
       >
         <Form
           name="basic"
@@ -216,22 +198,16 @@ const Question1 = () => {
             <Input
               value={dataDetail?.no}
               type="number"
-              max={6}
+              max={12}
               min={1}
               onChange={(e) => onChangeDataEdit(Number(e.target.value), "no")}
             ></Input>
           </Form.Item>
-          <Form.Item label="Thí sinh" className="flex-1">
-            <Select
-              value={dataDetail?.idUser}
-              options={listUser}
-              onChange={(e) => onChangeDataEdit(e, "idUser")}
-            ></Select>
-          </Form.Item>
+          <Form.Item label="Thí sinh" className="flex-1"></Form.Item>
         </Form>
       </Modal>
     </Card>
   );
 };
 
-export default Question1;
+export default QuestionGroup1;

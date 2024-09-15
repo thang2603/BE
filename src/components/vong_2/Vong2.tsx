@@ -79,22 +79,29 @@ const Vong2 = () => {
         <ShowPoint listAnswer={listAnswer} />
       ) : (
         <div className="flex flex-col justify-between gap-8 h-screen p-10">
-          <div className="flex gap-7">
+          <div className="flex gap-10">
             <ImageMagic listQuestion={listQuestion} />
             <RowWord listQuestion={listQuestion} />
           </div>
-          <div className="flex flex-col gap-4">
-            <CountdownCircleTimer
-              key={resetTime}
-              isPlaying={!!resetTime}
-              duration={15}
-              colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-              colorsTime={[15, 10, 5, 0]}
-              onUpdate={(value) => setUpdteTime(value)}
-              // onComplete={() => handleNextQuestion(resetTimer)}
-            >
-              {Timer}
-            </CountdownCircleTimer>
+          <div className="flex flex-col gap-4 ">
+            <div className=" flex justify-end">
+              <CountdownCircleTimer
+                key={resetTime}
+                isPlaying={!!resetTime}
+                duration={15}
+                colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                colorsTime={[15, 10, 5, 0]}
+                onUpdate={(value) => setUpdteTime(value)}
+                // onComplete={() => handleNextQuestion(resetTimer)}
+              >
+                {Timer}
+              </CountdownCircleTimer>
+              {user?.role === "MC" && (
+                <div>
+                  <p className="min-h-9">Đáp án : {numberQuestion.ans}</p>
+                </div>
+              )}
+            </div>
             <div className="flex  gap-6 min-w-[1000px]">
               <Card
                 title={
@@ -136,13 +143,6 @@ const Vong2 = () => {
                 Gửi câu trả lời
               </Button>
             </div>
-            {user?.role === "mc" && (
-              <div>
-                {/* <Card title="Đáp án">
-            <p className="min-h-9">{numberQuestion.ans}</p>
-          </Card> */}
-              </div>
-            )}
           </div>
         </div>
       )}

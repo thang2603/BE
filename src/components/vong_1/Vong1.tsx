@@ -17,7 +17,7 @@ const Vong1 = () => {
     useState<QuestionType>(INIT_QUESTION);
 
   useEffect(() => {
-    socket.on("listUserServer", (msg: UserType[]) => {
+    socket.on("listUserAndScoreServer", (msg: UserType[]) => {
       console.log(msg);
       setListUser([...msg]);
     });
@@ -31,8 +31,11 @@ const Vong1 = () => {
     socket.on("nextGroupServer1", (msg: UserType[]) => {
       navigate("/vong-group/1/user");
     });
+    socket.on("nextWaitScreenServer", (msg: string) => {
+      navigate("/wait-screen");
+    });
     return () => {
-      socket.off("listUserServer");
+      socket.off("listUserAndScoreServer");
       socket.off("quesGame1Server");
     };
   }, [socket, navigate]);

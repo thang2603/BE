@@ -17,8 +17,9 @@ const Control1 = () => {
   const [listUser, setListUser] = useState<UserType[]>([]);
   const [numberQuestion, setNumberQuestion] =
     useState<QuestionType>(INIT_QUESTION);
+
   const handleGetListUser = () => {
-    socket.emit("listUser", "admin");
+    socket.emit("listUserAndScore", "admin");
   };
 
   const handleNextQuestion = (msg: NumberQuestionType) => {
@@ -41,8 +42,7 @@ const Control1 = () => {
   };
 
   useEffect(() => {
-    socket.on("listUserServer", (msg: UserType[]) => {
-      console.log(msg);
+    socket.on("listUserAndScoreServer", (msg: UserType[]) => {
       setListUser([...msg]);
     });
 
@@ -82,10 +82,15 @@ const Control1 = () => {
       ),
     },
     {
+      title: "Điểm hiện tại",
+      dataIndex: "score",
+      key: "score",
+    },
+    {
       title: "Cập nhật điểm",
-      dataIndex: "address",
-      key: "address",
-      render: (data: UserType) => (
+      dataIndex: "score",
+      key: "score",
+      render: (text: number, data: UserType) => (
         <div className="flex gap-2 flex-wrap">
           <Button
             onClick={() =>
