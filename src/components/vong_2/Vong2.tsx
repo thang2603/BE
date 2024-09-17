@@ -1,16 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import Timer from "../Timer/Timer";
 import { Button, Card, Input } from "antd";
 import { SocketContext } from "../../context/SocketContext";
 import { UserContext, UserType } from "../../context/UserContext";
-import { INIT_QUESTION } from "../../constants/constants";
-import {
-  AnserDetailType,
-  AnswerType,
-  QuestionType,
-  QuestionType2,
-} from "../../types/Login";
+import { INIT_QUESTION_2 } from "../../constants/constants";
+import { AnserDetailType, AnswerType, QuestionType2 } from "../../types/Login";
 import ImageMagic from "./ImageMagic";
 import RowWord from "./RowWord";
 import ShowPoint from "./ShowPoint";
@@ -27,25 +22,30 @@ const Vong2 = () => {
   const [listAnswer, setListAnswer] = useState<AnserDetailType[]>([]);
   const [listQuestion, setListQuestion] = useState<QuestionType2[]>([]);
   const [numberQuestion, setNumberQuestion] =
-    useState<QuestionType>(INIT_QUESTION);
+    useState<QuestionType2>(INIT_QUESTION_2);
+
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     socket.on("listUserServer2", (msg: UserType[]) => {
-      console.log(msg);
       setListUser([...msg]);
       setListAnswer([]);
     });
+
     socket.on("listQuestionServer2", (msg: QuestionType2[]) => {
       setListQuestion([...msg]);
     });
-    socket.on("questionServer2", (msg: QuestionType) => {
-      console.log(msg);
+
+    socket.on("questionServer2", (msg: QuestionType2) => {
       setNumberQuestion({ ...msg });
+      console.log(msg);
     });
 
     socket.on("startTimeServer2", (msg: UserType[]) => {
-      console.log(msg);
       setRestTime((pre) => pre + 1);
+      audioRef?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
     });
 
     socket.on("showResultServer2", (msg: AnserDetailType[]) => {
@@ -65,7 +65,7 @@ const Vong2 = () => {
       socket.off("listUserServer2");
       socket.off("quesGame1Server");
     };
-  }, [socket, navigate]);
+  }, [socket, navigate, numberQuestion.type]);
 
   const handleSubmit = () => {
     if (user?.id) {
@@ -73,6 +73,7 @@ const Vong2 = () => {
       socket.emit("answer2", ans);
     }
   };
+
   return (
     <div>
       {listAnswer?.length > 0 ? (
@@ -84,7 +85,12 @@ const Vong2 = () => {
             <RowWord listQuestion={listQuestion} />
           </div>
           <div className="flex flex-col gap-4 ">
-            <div className=" flex justify-end">
+            <div className=" flex justify-end items-center gap-20">
+              <div>
+                {user?.role === "MC" && (
+                  <p className="min-h-9">Đáp án : {numberQuestion.ans}</p>
+                )}
+              </div>
               <CountdownCircleTimer
                 key={resetTime}
                 isPlaying={!!resetTime}
@@ -96,10 +102,12 @@ const Vong2 = () => {
               >
                 {Timer}
               </CountdownCircleTimer>
-              {user?.role === "MC" && (
-                <div>
-                  <p className="min-h-9">Đáp án : {numberQuestion.ans}</p>
-                </div>
+
+              {numberQuestion?.type === 2 && (
+                <audio
+                  ref={audioRef}
+                  src={`/vong2/${numberQuestion?.link}.mp3`}
+                />
               )}
             </div>
             <div className="flex  gap-6 min-w-[1000px]">
@@ -117,14 +125,6 @@ const Vong2 = () => {
                 {listUser.map((item) => (
                   <div
                     key={item?.id}
-                    style={
-                      item.id === numberQuestion.idUser
-                        ? {
-                            backgroundColor: "red",
-                            color: "#ffffff",
-                          }
-                        : {}
-                    }
                     className="flex gap-2 items-center justify-between bg-sky-800 text-white rounded-md p-2"
                   >
                     <p className="font-semibold">{item.fullName}</p>

@@ -22,6 +22,7 @@ const INIT_QUESTION_2: QuestionType2 = {
   type: 1,
   no: 1,
   isActive: 0,
+  link: "",
 };
 
 const OPTION_TYPE_QUESTION = [
@@ -117,6 +118,13 @@ const Question2 = () => {
       title: "Thể loại câu hỏi",
       dataIndex: "type",
       key: "type",
+      render: (text) => <span>{OPTION_TYPE_QUESTION?.[text - 1].label}</span>,
+      width: 150,
+    },
+    {
+      title: "Tên file (Nếu có)",
+      dataIndex: "link",
+      key: "link",
       render: (text) => <span>{text}</span>,
       width: 150,
     },
@@ -155,7 +163,7 @@ const Question2 = () => {
   ];
 
   return (
-    <Card title="Vòng 1">
+    <Card title="Vòng 2">
       <Form
         name="basic"
         className="flex  w-full justify-center flex-wrap flex-col"
@@ -183,6 +191,9 @@ const Question2 = () => {
             options={OPTION_TYPE_QUESTION}
             onChange={(e) => onChangeData(e, "type")}
           ></Select>
+        </Form.Item>
+        <Form.Item label="Tên file" className="flex-1">
+          <Input onChange={(e) => onChangeData(e.target.value, "link")}></Input>
         </Form.Item>
         <Form.Item label="" className="flex-1 flex justify-center">
           <Button
@@ -237,6 +248,12 @@ const Question2 = () => {
               options={OPTION_TYPE_QUESTION}
               onChange={(e) => onChangeDataEdit(e, "type")}
             ></Select>
+          </Form.Item>
+          <Form.Item label="Tên file" className="flex-1">
+            <Input
+              value={dataDetail?.link || ""}
+              onChange={(e) => onChangeDataEdit(e.target.value, "link")}
+            ></Input>
           </Form.Item>
           <Form.Item label="Trạng thái" className="flex-1">
             <Checkbox

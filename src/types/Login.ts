@@ -44,6 +44,7 @@ export interface QuestionType2 {
   no: number;
   type: number;
   isActive: number;
+  link?: string;
 }
 
 export interface QuestionType3 {

@@ -1,5 +1,4 @@
 import { Image } from "antd";
-import imgtest from "../../assets/test.png";
 import { QuestionType2 } from "../../types/Login";
 
 interface DataTypeProps {
@@ -8,7 +7,8 @@ interface DataTypeProps {
 const ImageMagic = ({ listQuestion }: DataTypeProps) => {
   return (
     <div className="relative" style={{ width: 500, height: 300 }}>
-      <Image src={imgtest} width="100%" height="100%" />
+      <Image src={`/vong1/test.png`} width="100%" height="100%" />
+
       {!listQuestion[0]?.isActive && (
         <div className="absolute w-1/2 bg-sky-800 h-1/2 border-2 border-solid border-slate-200 top-0 left-0">
           <div className="flex justify-center">

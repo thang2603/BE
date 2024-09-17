@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useEffect } from "react";
+import React, { ReactNode, useContext } from "react";
 
 import { Button, Card } from "antd";
 import { useNavigate } from "react-router-dom";

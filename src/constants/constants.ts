@@ -1,6 +1,7 @@
 import {
   QuestionFourType,
   QuestionType,
+  QuestionType2,
   QuestionTypeBody,
   QuestionTypeBody4,
 } from "../types/Login";
@@ -14,13 +15,20 @@ export const INIT_QUESTION: QuestionType = {
   ques: "",
   ans: "",
   quantity: 0,
-
   no: 0,
   idUser: 0,
   score: 0,
   type: 0,
 };
-
+export const INIT_QUESTION_2: QuestionType2 = {
+  id: 0,
+  ques: "",
+  ans: "",
+  no: 0,
+  type: 0,
+  isActive: 0,
+  link: "",
+};
 export const INIT_QUESTION_BODY: QuestionTypeBody = {
   ques: "",
   ans: "",
