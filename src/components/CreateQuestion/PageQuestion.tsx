@@ -18,11 +18,16 @@ const PageQuestion = ({ children }: DataTypeProps) => {
     socket.emit("nextWaitScreen");
   };
 
+  const handleCreateData = () => {
+    socket.emit("createTableDatabase");
+  };
+
   return (
     <div className="flex flex-col gap-3">
       <Card>
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 flex-wrap">
+            <Button onClick={handleCreateData}>Tạo các bảng data</Button>
             <Button onClick={() => handleNavigate("/create/1")}>
               Tạo câu hỏi vòng 1 thi riêng
             </Button>

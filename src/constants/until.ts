@@ -1,5 +1,5 @@
-import { DefaultOptionType } from "antd/es/select";
 import { UserType, UserUpdateType } from "../context/UserContext";
+import { LinkImageType } from "../types/Login";
 
 export const convertScore = (data: UserType[]) => {
   const newData: UserUpdateType[] = [...data]?.map((item) => ({
@@ -30,4 +30,9 @@ export const convertOption = <T, K extends keyof T>(
     label: item[fieldLabel],
   }));
   return newData;
+};
+
+export const createKey = (data: LinkImageType[]) => {
+  if (data.length === 0) return 0;
+  return data[data?.length - 1].id + 1;
 };

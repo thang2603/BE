@@ -12,14 +12,20 @@ import {
 } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../context/SocketContext";
-import { QuestionType2, QuestionType3 } from "../../types/Login";
+import { LinkImageType, QuestionType2, QuestionType3 } from "../../types/Login";
+import { createKey } from "../../constants/until";
 
+const INIT_IMAGE: LinkImageType = {
+  id: 0,
+  link: "",
+};
 const INIT_QUESTION_3: QuestionType3 = {
   id: 1,
   ans: "",
   ques: "",
   type: 1,
   no: 1,
+  image: [INIT_IMAGE],
 };
 
 const OPTION_TYPE_QUESTION = [
@@ -94,6 +100,27 @@ const Question3 = () => {
     socket.emit("deleteQuestion3", idQues);
   };
 
+  const handleAddNewImage = () => {
+    const newKey = createKey(questionBody.image);
+    const newData = { ...INIT_IMAGE, id: newKey };
+    const newListImage = [...questionBody.image, newData];
+    setQuestionBody((pre) => ({ ...pre, image: newListImage }));
+  };
+
+  const handleDeleteImage = (idImage: number) => {
+    const newListImage = [...questionBody.image].filter(
+      (item) => item?.id !== idImage
+    );
+    setQuestionBody((pre) => ({ ...pre, image: newListImage }));
+  };
+
+  const handleChangeImage = (idImage: number, value: string) => {
+    const newListImage = [...questionBody.image].map((item) =>
+      item.id === idImage ? { ...item, link: value } : item
+    );
+    setQuestionBody((pre) => ({ ...pre, image: newListImage }));
+  };
+
   const columns: TableProps<QuestionType3>["columns"] = [
     {
       title: "Câu hỏi",
@@ -106,10 +133,16 @@ const Question3 = () => {
       key: "ans",
     },
     {
-      title: "Thể loại câu hỏi",
-      dataIndex: "type",
-      key: "type",
-      render: (text) => <span>{OPTION_TYPE_QUESTION[text - 1].label}</span>,
+      title: "Link ảnh",
+      dataIndex: "image",
+      key: "image",
+      render: (text) => (
+        <div>
+          {text?.map((item: LinkImageType) => (
+            <p>{item.link}</p>
+          ))}
+        </div>
+      ),
       width: 180,
     },
     {
@@ -163,11 +196,24 @@ const Question3 = () => {
             onChange={(e) => onChangeData(Number(e.target.value), "no")}
           ></Input>
         </Form.Item>
-        <Form.Item label="Thể loại" className="flex-1">
-          <Select
-            options={OPTION_TYPE_QUESTION}
-            onChange={(e) => onChangeData(e, "type")}
-          ></Select>
+
+        <Form.Item label="Link ảnh" className="flex-1 ">
+          <div className="flex flex-col gap-2">
+            {questionBody.image.map((item) => (
+              <div key={item.id} className="flex items-center gap-4">
+                <Input
+                  value={item?.link}
+                  onChange={(e) => handleChangeImage(item?.id, e.target.value)}
+                />
+                <div className="flex items-center gap-2">
+                  <Button onClick={handleAddNewImage}>Thêm</Button>
+                  <Button onClick={() => handleDeleteImage(item.id)}>
+                    Xóa
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
         </Form.Item>
         <Form.Item label="" className="flex-1 flex justify-center">
           <Button
@@ -183,7 +229,7 @@ const Question3 = () => {
       <Modal
         open={isOpenModal}
         onOk={() =>
-          handleSubmit(dataDetail as QuestionType2, "updateQuestion3")
+          handleSubmit(dataDetail as QuestionType3, "updateQuestion3")
         }
         onCancel={handleCloseModal}
       >
@@ -215,13 +261,6 @@ const Question3 = () => {
               min={1}
               onChange={(e) => onChangeDataEdit(Number(e.target.value), "no")}
             ></Input>
-          </Form.Item>
-          <Form.Item label="Thể loại" className="flex-1">
-            <Select
-              value={dataDetail?.type}
-              options={OPTION_TYPE_QUESTION}
-              onChange={(e) => onChangeDataEdit(e, "type")}
-            ></Select>
           </Form.Item>
         </Form>
       </Modal>

@@ -53,6 +53,11 @@ export interface QuestionType3 {
   ans: string;
   no: number;
   type: number;
+  image: LinkImageType[];
+}
+export interface LinkImageType {
+  id: number;
+  link: string;
 }
 export interface NumberQuestionType {
   idUser: number;
