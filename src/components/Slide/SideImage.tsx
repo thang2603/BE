@@ -1,10 +1,9 @@
-import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css"; // Đường dẫn đúng cho file CSS
 import "swiper/css/pagination"; // CSS cho pagination nếu cần
 import "swiper/css/navigation"; // CSS cho navigation nếu cần
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import { Button, Image } from "antd";
+import { Image } from "antd";
 import { LinkImageType } from "../../types/Login";
 
 interface DataTypeProps {

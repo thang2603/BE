@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext } from "react";
 
-import { Button, Card } from "antd";
+import { Button, Card, Popconfirm } from "antd";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../../context/SocketContext";
 
@@ -63,9 +63,11 @@ const PageQuestion = ({ children }: DataTypeProps) => {
             <Button onClick={() => handleNavigate("/vong/4/control")}>
               Kĩ thuật vòng 4
             </Button>
-            <Button onClick={handleNextWaitScreen}>
-              Chuyển qua màn hình chờ
-            </Button>
+            <Popconfirm title="Bạn có muốn chuyển qua màn hình chờ không?">
+              <Button onClick={handleNextWaitScreen}>
+                Chuyển qua màn hình chờ
+              </Button>
+            </Popconfirm>
           </div>
         </div>
       </Card>

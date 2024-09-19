@@ -57,8 +57,8 @@ const Vong2 = () => {
       setListAnswer([...msg]);
     });
 
-    socket.on("nextServer3", (msg: AnserDetailType[]) => {
-      navigate("/vong/3/user");
+    socket.on("nextWaitScreenServer", (msg: string) => {
+      navigate("/wait-screen");
     });
 
     return () => {

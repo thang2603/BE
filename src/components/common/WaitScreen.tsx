@@ -1,11 +1,15 @@
 import { useContext, useEffect } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import "./WaitScreen.css";
+import { useNavigate } from "react-router-dom";
 const WaitScreen = () => {
   const { socket } = useContext(SocketContext);
+  const navigate = useNavigate();
   useEffect(() => {
-    socket.on("listQuestionServer2", (msg: string) => {});
-  }, [socket]);
+    socket.on("nextGameFromSever", (msg: string) => {
+      navigate(msg);
+    });
+  }, [socket, navigate]);
   return (
     <div className="container">
       <div className="relative element">

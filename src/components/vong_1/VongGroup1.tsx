@@ -47,10 +47,10 @@ const VongGroup1 = () => {
     socket.on("pressRung1Server", (msg: number) => {
       setIdPress(msg);
     });
-    socket.on("nextServer2", (msg: number) => {
-      navigate("/vong/2/user");
-    });
 
+    socket.on("nextWaitScreenServer", (msg: string) => {
+      navigate("/wait-screen");
+    });
     return () => {
       socket.off("listUserServer");
       socket.off("quesGame1Server");

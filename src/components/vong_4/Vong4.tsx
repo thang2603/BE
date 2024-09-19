@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import Timer from "../Timer/Timer";
 import { Card } from "antd";
@@ -7,9 +7,11 @@ import { SocketContext } from "../../context/SocketContext";
 import { QuestionFourType } from "../../types/Login";
 import { INIT_QUESTION_FOUR } from "../../constants/constants";
 import MovingStar from "../Star/Start";
+import { useNavigate } from "react-router-dom";
 
 const Vong4 = () => {
   const { socket } = useContext(SocketContext);
+  const navigate = useNavigate();
   const [resetTime, setRestTime] = useState<number>(0);
   const [listUser, setListUser] = useState<UserUpdateType[]>([]);
   const [question, setQuestion] =
@@ -33,12 +35,15 @@ const Vong4 = () => {
     socket.on("cancelStartServer4", (msg: number) => {
       setStar(0);
     });
+    socket.on("nextWaitScreenServer", (msg: string) => {
+      navigate("/wait-screen");
+    });
     return () => {
       socket.off("listUserServer4");
       socket.off("sendQuestionServer4");
       socket.off("startServer4");
     };
-  }, [socket]);
+  }, [socket, navigate]);
 
   const findByUser = () => {
     const valueUser = [...listUser].find(

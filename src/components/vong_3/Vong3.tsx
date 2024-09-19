@@ -1,16 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import Timer from "../Timer/Timer";
 import { Button, Card, Input, Typography } from "antd";
 import { SocketContext } from "../../context/SocketContext";
 import { UserContext, UserType } from "../../context/UserContext";
-import { INIT_QUESTION } from "../../constants/constants";
-import {
-  AnserDetailType,
-  AnswerType,
-  QuestionType,
-  QuestionType3,
-} from "../../types/Login";
+
+import { AnserDetailType, AnswerType, QuestionType3 } from "../../types/Login";
 
 import ShowPoint from "./ShowPoint";
 import { useNavigate } from "react-router-dom";
@@ -52,8 +47,8 @@ const Vong3 = () => {
       setRestTime((pre) => ({ ...pre, isPlaying: false }));
     });
 
-    socket.on("nextServer4", (msg: string) => {
-      navigate("/vong/4/user");
+    socket.on("nextWaitScreenServer", (msg: string) => {
+      navigate("/wait-screen");
     });
     return () => {
       socket.off("listUserServer2");
