@@ -58,7 +58,9 @@ export interface QuestionType3 {
 export interface LinkImageType {
   id: number;
   link: string;
+  status: StatusImage;
 }
+export type StatusImage = "add" | "edit" | "delete";
 export interface NumberQuestionType {
   idUser: number;
   noQues: number;

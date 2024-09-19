@@ -6,7 +6,6 @@ import {
   message,
   Modal,
   Popconfirm,
-  Select,
   Table,
   TableProps,
 } from "antd";
@@ -15,11 +14,12 @@ import { SocketContext } from "../../context/SocketContext";
 import { LinkImageType, QuestionType2, QuestionType3 } from "../../types/Login";
 import { createKey } from "../../constants/until";
 
-const INIT_IMAGE: LinkImageType = {
+export const INIT_IMAGE: LinkImageType = {
   id: 0,
   link: "",
+  status: "add",
 };
-const INIT_QUESTION_3: QuestionType3 = {
+export const INIT_QUESTION_3: QuestionType3 = {
   id: 1,
   ans: "",
   ques: "",
@@ -28,16 +28,6 @@ const INIT_QUESTION_3: QuestionType3 = {
   image: [INIT_IMAGE],
 };
 
-const OPTION_TYPE_QUESTION = [
-  {
-    value: 1,
-    label: "Câu hỏi hình ảnh",
-  },
-  {
-    value: 2,
-    label: "Câu hỏi video",
-  },
-];
 const Question3 = () => {
   const { socket } = useContext(SocketContext);
   const [listQuestion, setListQuestion] = useState<QuestionType3[]>([]);
@@ -119,6 +109,33 @@ const Question3 = () => {
       item.id === idImage ? { ...item, link: value } : item
     );
     setQuestionBody((pre) => ({ ...pre, image: newListImage }));
+  };
+
+  const handleAddImageEdit = () => {
+    const newKey = createKey(dataDetail.image);
+    const newData: LinkImageType = { ...INIT_IMAGE, id: newKey, status: "add" };
+    const newListImage = [...dataDetail.image, newData];
+    setDataDetail((pre) => ({ ...pre, image: newListImage }));
+  };
+
+  const handleChangeImageEdit = (idImage: number, value: string) => {
+    const newListImage: LinkImageType[] = [...dataDetail.image].map((item) =>
+      item.id === idImage
+        ? {
+            ...item,
+            link: value,
+            status: item.status === "add" ? item.status : "edit",
+          }
+        : item
+    );
+    setDataDetail((pre) => ({ ...pre, image: newListImage }));
+  };
+
+  const handleDeleteImageEdit = (idImage: number) => {
+    const newListImage: LinkImageType[] = [...dataDetail.image].map((item) =>
+      item.id === idImage ? { ...item, status: "delete" } : item
+    );
+    setDataDetail((pre) => ({ ...pre, image: newListImage }));
   };
 
   const columns: TableProps<QuestionType3>["columns"] = [
@@ -261,6 +278,30 @@ const Question3 = () => {
               min={1}
               onChange={(e) => onChangeDataEdit(Number(e.target.value), "no")}
             ></Input>
+          </Form.Item>
+
+          <Form.Item label="Link ảnh" className="flex-1 ">
+            <div className="flex flex-col gap-2">
+              {dataDetail.image.map(
+                (item) =>
+                  item.status !== "delete" && (
+                    <div key={item.id} className="flex items-center gap-4">
+                      <Input
+                        value={item?.link}
+                        onChange={(e) =>
+                          handleChangeImageEdit(item?.id, e.target.value)
+                        }
+                      />
+                      <div className="flex items-center gap-2">
+                        <Button onClick={handleAddImageEdit}>Thêm</Button>
+                        <Button onClick={() => handleDeleteImageEdit(item.id)}>
+                          Xóa
+                        </Button>
+                      </div>
+                    </div>
+                  )
+              )}
+            </div>
           </Form.Item>
         </Form>
       </Modal>

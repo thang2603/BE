@@ -11,6 +11,7 @@ const Control3 = () => {
   const { socket } = useContext(SocketContext);
   const [listUser, setListUser] = useState<UserUpdateType[]>([]);
   const [listQuestion, setListQuestion] = useState<QuestionType2[]>([]);
+  const [duration, setDuration] = useState<number>(15);
   const [numberQuestion, setNumberQuestion] =
     useState<QuestionType>(INIT_QUESTION);
 
@@ -42,12 +43,12 @@ const Control3 = () => {
     socket.emit("listQuestion3", "admin");
   };
 
-  const handleGetQuestion = (index: number) => {
-    socket.emit("question3", index);
+  const handleGetQuestion = (index: number, idQues: number) => {
+    socket.emit("question3", { no: index, idQues: idQues });
   };
 
   const handleStart = () => {
-    socket.emit("startControl3", "Start");
+    socket.emit("startControl3", duration);
   };
 
   const updateScore = () => {
@@ -110,13 +111,12 @@ const Control3 = () => {
           <p>Câu trả lời : {numberQuestion?.ans}</p>
         </div>
         <div className="flex gap-3 flex-col">
-          <div>
+          <div className="flex flex-col gap-2">
             <div className="flex gap-4">
               <Button onClick={handleGetListUser}>
                 Lấy danh sách thí sinh
               </Button>
 
-              <Button onClick={handleStart}>Bắt đầu tính thời gian</Button>
               <Button onClick={handleShowResult}>
                 Hiện thị câu trả lời của thí sinh
               </Button>
@@ -128,14 +128,26 @@ const Control3 = () => {
                 <Button>Chuyển qua vòng 4</Button>
               </Popconfirm>
             </div>
-            <p>Danh sách thí sinh</p>
+            <div>
+              <div className="flex items-center gap-3">
+                <Button onClick={handleStart}>Bắt đầu tính thời gian</Button>
+                <Input
+                  type="number"
+                  min={1}
+                  className="w-32"
+                  onChange={(e) => setDuration(Number(e.target.value))}
+                  value={duration}
+                />
+              </div>
+              <p>Danh sách thí sinh</p>
+            </div>
           </div>
           <div className="flex gap-3">
             {listQuestion.map((item) => (
               <div className="flex flex-col gap-3">
                 <Button
-                  onClick={() => handleGetQuestion(item.no)}
-                >{`Câu hỏi số ${item.id}`}</Button>
+                  onClick={() => handleGetQuestion(item.no, item.id)}
+                >{`Câu hỏi số ${item.no}`}</Button>
               </div>
             ))}
           </div>
