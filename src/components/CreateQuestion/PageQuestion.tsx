@@ -63,10 +63,11 @@ const PageQuestion = ({ children }: DataTypeProps) => {
             <Button onClick={() => handleNavigate("/vong/4/control")}>
               Kĩ thuật vòng 4
             </Button>
-            <Popconfirm title="Bạn có muốn chuyển qua màn hình chờ không?">
-              <Button onClick={handleNextWaitScreen}>
-                Chuyển qua màn hình chờ
-              </Button>
+            <Popconfirm
+              title="Bạn có muốn chuyển qua màn hình chờ không?"
+              onConfirm={handleNextWaitScreen}
+            >
+              <Button>Chuyển qua màn hình chờ</Button>
             </Popconfirm>
           </div>
         </div>

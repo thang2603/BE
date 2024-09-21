@@ -42,6 +42,7 @@ const Control1 = () => {
   };
 
   useEffect(() => {
+    socket.emit("listUserAndScore", "admin");
     socket.on("listUserAndScoreServer", (msg: UserType[]) => {
       setListUser([...msg]);
     });

@@ -24,6 +24,8 @@ import Question4 from "./components/CreateQuestion/Question4";
 import CreateUser from "./components/CreateQuestion/CreateUser";
 import QuestionGroup1 from "./components/CreateQuestion/QuestionGroup1";
 import WaitScreen from "./components/common/WaitScreen";
+import Vong5 from "./components/vong5/Vong5";
+import LuckyWheel from "./components/vong5/LuckyWheel";
 
 function App() {
   const { user } = useContext(UserContext);
@@ -179,6 +181,24 @@ function App() {
                 <PageQuestion>
                   <Control4 />
                 </PageQuestion>
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route path="vong/5">
+          <Route
+            path="user"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <Vong5 />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="random"
+            element={
+              <ProtectedRoute isAuth={user?.id}>
+                <LuckyWheel />
               </ProtectedRoute>
             }
           />

@@ -79,10 +79,12 @@ const Vong2 = () => {
       {listAnswer?.length > 0 ? (
         <ShowPoint listAnswer={listAnswer} />
       ) : (
-        <div className="flex flex-col justify-between gap-8 h-screen p-10">
-          <div className="flex gap-10">
-            <ImageMagic listQuestion={listQuestion} />
-            <RowWord listQuestion={listQuestion} />
+        <div className="flex flex-col justify-between gap-8 h-screen p-16">
+          <div className="flex justify-center">
+            <div className="flex gap-10">
+              <ImageMagic listQuestion={listQuestion} />
+              <RowWord listQuestion={listQuestion} />
+            </div>
           </div>
           <div className="flex flex-col gap-4 ">
             <div className=" flex justify-end items-center gap-20">

@@ -171,7 +171,7 @@ const CreateUser = () => {
               className="w-48"
               onClick={() => handleSubmit(questionBody, "createUserService")}
             >
-              Tạo câu hỏi
+              Tạo tài khoản
             </Button>
           </Form.Item>
         </Form>

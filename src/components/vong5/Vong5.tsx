@@ -9,7 +9,7 @@ import { QuestionType } from "../../types/Login";
 import { UserContext } from "./../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
-const VongGroup1 = () => {
+const Vong5 = () => {
   const { socket } = useContext(SocketContext);
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
@@ -106,14 +106,12 @@ const VongGroup1 = () => {
         </div>
       </div>
       <div>
-        {user?.role === "MC" && (
-          <Card title="Đáp án">
-            <p className="min-h-9">{numberQuestion.ans}</p>
-          </Card>
-        )}
+        <Card title="Đáp án">
+          <p className="min-h-9">{numberQuestion.ans}</p>
+        </Card>
       </div>
     </div>
   );
 };
 
-export default VongGroup1;
+export default Vong5;

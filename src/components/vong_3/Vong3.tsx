@@ -72,9 +72,9 @@ const Vong3 = () => {
       {listAnswer.length > 0 ? (
         <ShowPoint listAnswer={listAnswer} />
       ) : (
-        <div className="flex gap-20 justify-center items-center p-5">
-          <div className="flex-1  ">
-            <div className="flex flex-col gap-2 w-[1000px]">
+        <div className="flex gap-20 justify-center items-center p-20">
+          <div className="">
+            <div className="flex flex-col gap-2 w-[900px]">
               <Card className="bg-sky-800 text-white">
                 <Typography className="text-white text-xl">
                   {numberQuestion.ques}
@@ -82,7 +82,7 @@ const Vong3 = () => {
               </Card>
 
               <Card className="flex bg-sky-800 justify-center">
-                <div className="w-[900px]">
+                <div className="w-[800px] h-[600px]">
                   {resetTime.isPlaying && (
                     <ImageCarousel
                       listImage={numberQuestion.image}

@@ -27,7 +27,7 @@ const ImageCarousel = ({ listImage, resetTime }: DataTypeProps) => {
         <SwiperSlide key={item.id}>
           <Image
             src={`/vong3/${item.link}`}
-            width={900}
+            width={800}
             height={600}
             preview={false}
           />

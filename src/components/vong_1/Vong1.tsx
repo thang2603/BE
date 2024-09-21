@@ -3,7 +3,7 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import Timer from "../Timer/Timer";
 import { Card } from "antd";
 import { SocketContext } from "../../context/SocketContext";
-import { UserType } from "../../context/UserContext";
+import { UserContext, UserType } from "../../context/UserContext";
 import { INIT_QUESTION } from "../../constants/constants";
 import { QuestionType } from "../../types/Login";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ const Vong1 = () => {
   const navigate = useNavigate();
   const { socket } = useContext(SocketContext);
   const [listUser, setListUser] = useState<UserType[]>([]);
+  const { user } = useContext(UserContext);
   const [resetTime, setRestTime] = useState<number>(0);
   const [numberQuestion, setNumberQuestion] =
     useState<QuestionType>(INIT_QUESTION);
@@ -83,9 +84,11 @@ const Vong1 = () => {
         </div>
       </div>
       <div>
-        <Card title="Đáp án">
-          <p className="min-h-9">{numberQuestion.ans}</p>
-        </Card>
+        {user?.role === "MC" && (
+          <Card title="Đáp án">
+            <p className="min-h-9">{numberQuestion.ans}</p>
+          </Card>
+        )}
       </div>
     </div>
   );
