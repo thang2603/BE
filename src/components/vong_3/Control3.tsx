@@ -29,7 +29,7 @@ const Control3 = () => {
     });
 
     return () => {
-      socket.off("listUserServer3");
+      socket.off();
     };
   }, [socket]);
 

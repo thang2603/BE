@@ -54,8 +54,7 @@ const CreateUser = () => {
     });
 
     return () => {
-      socket.off("listUserService");
-      socket.off("quesGame1Server");
+      socket.off();
     };
   }, [socket]);
 

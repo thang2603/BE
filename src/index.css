@@ -10,10 +10,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
-  background: radial-gradient(
-    circle,
-    rgba(238, 174, 202, 1) 0%,
-    rgba(148, 187, 233, 1) 100%
+  background: linear-gradient(
+    90deg,
+    rgba(238, 174, 174, 1) 0%,
+    rgba(209, 217, 180, 1) 42%,
+    rgba(214, 188, 185, 1) 55%,
+    rgba(203, 211, 190, 1) 84%,
+    rgba(148, 223, 233, 1) 100%
   );
 }
 

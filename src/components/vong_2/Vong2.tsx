@@ -10,7 +10,7 @@ import ImageMagic from "./ImageMagic";
 import RowWord from "./RowWord";
 import ShowPoint from "./ShowPoint";
 import { useNavigate } from "react-router-dom";
-
+import "./Vong2.css";
 const Vong2 = () => {
   const { socket } = useContext(SocketContext);
   const navigate = useNavigate();
@@ -23,27 +23,50 @@ const Vong2 = () => {
   const [listQuestion, setListQuestion] = useState<QuestionType2[]>([]);
   const [numberQuestion, setNumberQuestion] =
     useState<QuestionType2>(INIT_QUESTION_2);
-
+  const [isAudioEnded, setIsAudioEnded] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const audioStartRef = useRef<HTMLAudioElement>(null);
+  const audioTimeRef = useRef<HTMLAudioElement>(null);
+  const audioRowShow = useRef<HTMLAudioElement>(null);
+  const audioChoseRow = useRef<HTMLAudioElement>(null);
+  const audioWrongRow = useRef<HTMLAudioElement>(null);
+  const audioPictureReveal = useRef<HTMLAudioElement>(null);
+  const handleEndAuioStart = () => {
+    audioRowShow?.current?.play().catch((error) => {
+      console.log("Playback prevented:", error);
+    });
+    setIsAudioEnded(true);
+  };
 
   useEffect(() => {
+    audioStartRef?.current?.play().catch((error) => {
+      console.log("Playback prevented:", error);
+    });
+    socket.emit("listUser2", "admin");
+    socket.emit("listQuestion2", "admin");
     socket.on("listUserServer2", (msg: UserType[]) => {
       setListUser([...msg]);
       setListAnswer([]);
     });
 
     socket.on("listQuestionServer2", (msg: QuestionType2[]) => {
+      console.log("audi");
+      audioPictureReveal?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
       setListQuestion([...msg]);
     });
 
     socket.on("questionServer2", (msg: QuestionType2) => {
       setNumberQuestion({ ...msg });
-      console.log(msg);
+      audioRef?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
     });
 
     socket.on("startTimeServer2", (msg: UserType[]) => {
       setRestTime((pre) => pre + 1);
-      audioRef?.current?.play().catch((error) => {
+      audioTimeRef?.current?.play().catch((error) => {
         console.log("Playback prevented:", error);
       });
     });
@@ -53,19 +76,26 @@ const Vong2 = () => {
       setRestTime(0);
     });
 
-    socket.on("showResultServer2", (msg: AnserDetailType[]) => {
-      setListAnswer([...msg]);
-    });
-
     socket.on("nextWaitScreenServer", (msg: string) => {
       navigate("/wait-screen");
     });
 
+    socket.on("choseRowServer", (msg: string) => {
+      audioChoseRow?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
+    });
+
+    socket.on("allWrongServer", (msg: string) => {
+      audioWrongRow?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
+    });
+
     return () => {
-      socket.off("listUserServer2");
-      socket.off("quesGame1Server");
+      socket.off();
     };
-  }, [socket, navigate, numberQuestion.type]);
+  }, [socket, navigate]);
 
   const handleSubmit = () => {
     if (user?.id) {
@@ -79,31 +109,65 @@ const Vong2 = () => {
       {listAnswer?.length > 0 ? (
         <ShowPoint listAnswer={listAnswer} />
       ) : (
-        <div className="flex flex-col justify-between gap-8 h-screen p-16">
-          <div className="flex justify-center">
-            <div className="flex gap-10">
-              <ImageMagic listQuestion={listQuestion} />
-              <RowWord listQuestion={listQuestion} />
+        <div className="flex flex-col justify-between gap-8 h-screen p-16 overflow-hidden">
+          <div className="absolute">
+            <audio
+              ref={audioStartRef}
+              src={`/vong2/StartRound.mp3`}
+              onEnded={handleEndAuioStart}
+            />
+          </div>
+          <div className={`${isAudioEnded ? "opacity-100" : "opacity-0"}`}>
+            <div className="flex justify-center ">
+              <div className="flex gap-10">
+                <div className="absolute">
+                  <audio ref={audioRowShow} src={`/vong2/RowsShow.mp3`} />
+                </div>
+                <div className="absolute">
+                  <audio ref={audioChoseRow} src={`/vong2/RowChoose.mp3`} />
+                </div>
+                <div className="absolute">
+                  <audio ref={audioWrongRow} src={`/vong2/WrongRow.mp3`} />
+                </div>
+                <div className="absolute">
+                  <audio
+                    ref={audioPictureReveal}
+                    src={`/vong2/PictureReveal.mp3`}
+                  />
+                </div>
+                <ImageMagic listQuestion={listQuestion} />
+                <RowWord listQuestion={listQuestion} />
+              </div>
             </div>
           </div>
+
           <div className="flex flex-col gap-4 ">
-            <div className=" flex justify-end items-center gap-20">
+            <div className=" flex justify-end items-center gap-20 ">
+              {user?.role === "MC" && (
+                <Card title="Đáp án">
+                  <p className="min-h-9 font-semibold text-2xl">
+                    {numberQuestion.ans}
+                  </p>
+                </Card>
+              )}
               <div>
-                {user?.role === "MC" && (
-                  <p className="min-h-9">Đáp án : {numberQuestion.ans}</p>
-                )}
+                <div className="movingBox">
+                  <CountdownCircleTimer
+                    key={resetTime}
+                    isPlaying={!!resetTime}
+                    duration={15}
+                    colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                    colorsTime={[15, 10, 5, 0]}
+                    onUpdate={(value) => setUpdteTime(value)}
+                    // onComplete={() => handleNextQuestion(resetTimer)}
+                  >
+                    {Timer}
+                  </CountdownCircleTimer>
+                </div>
+                <div className="absolute">
+                  <audio ref={audioTimeRef} src={`/vong2/15Seconds.mp3`} />
+                </div>
               </div>
-              <CountdownCircleTimer
-                key={resetTime}
-                isPlaying={!!resetTime}
-                duration={15}
-                colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-                colorsTime={[15, 10, 5, 0]}
-                onUpdate={(value) => setUpdteTime(value)}
-                // onComplete={() => handleNextQuestion(resetTimer)}
-              >
-                {Timer}
-              </CountdownCircleTimer>
 
               {numberQuestion?.type === 2 && (
                 <audio
@@ -112,22 +176,22 @@ const Vong2 = () => {
                 />
               )}
             </div>
-            <div className="flex  gap-6 min-w-[1000px]">
+            <div className="flex  gap-6 min-w-[1000px] ">
               <Card
                 title={
                   <p className="text-white">{`Câu hỏi ${numberQuestion.no}`}</p>
                 }
-                className="flex-1 bg-sky-800 "
+                className="flex-1 baseColor movingBoxLeft "
               >
                 <p className="text-white font-semibold">
                   {numberQuestion.ques}
                 </p>
               </Card>
-              <div className="min-w-96 flex flex-col gap-2">
+              <div className="min-w-96 flex flex-col gap-2 movingBox">
                 {listUser.map((item) => (
                   <div
                     key={item?.id}
-                    className="flex gap-2 items-center justify-between bg-sky-800 text-white rounded-md p-2"
+                    className="flex gap-2 items-center justify-between baseColor text-white rounded-md p-2"
                   >
                     <p className="font-semibold">{item.fullName}</p>
                     <p className="w-7 font-semibold">{item?.score}</p>
@@ -135,16 +199,19 @@ const Vong2 = () => {
                 ))}
               </div>
             </div>
-            <div className="flex gap-10">
-              <Input onChange={(e) => setAnswer(e.target.value)}></Input>
-              <Button
-                disabled={!updateTime}
-                onClick={handleSubmit}
-                className="w-[450px]"
-              >
-                Gửi câu trả lời
-              </Button>
-            </div>
+
+            {user.role === "USER" && (
+              <div className="flex gap-10">
+                <Input onChange={(e) => setAnswer(e.target.value)}></Input>
+                <Button
+                  disabled={!updateTime}
+                  onClick={handleSubmit}
+                  className="w-[450px]"
+                >
+                  Gửi câu trả lời
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}

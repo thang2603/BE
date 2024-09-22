@@ -1,0 +1,24 @@
+.movingBox {
+  animation: moveRight 3s forwards; /* Chuyển động lặp vô hạn */
+}
+
+.movingBoxLeft {
+  animation: moveLeft 3s forwards; /* Chuyển động lặp vô hạn */
+}
+
+@keyframes moveLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0); /* Di chuyển hết chiều rộng của viewport */
+  }
+}
+@keyframes moveRight {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0); /* Di chuyển hết chiều rộng của viewport */
+  }
+}

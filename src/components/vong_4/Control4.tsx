@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { UserType, UserUpdateType } from "../../context/UserContext";
 import { QuestionFourType } from "../../types/Login";
-import { Button, Input, Table } from "antd";
+import { Button, Checkbox, Input, Table } from "antd";
 import { SocketContext } from "../../context/SocketContext";
 import { convertScore, onChangeData } from "../../constants/until";
 
@@ -9,22 +9,21 @@ const Control4 = () => {
   const [listUser, setListUser] = useState<UserUpdateType[]>([]);
   const [listQuestion, setListQuestion] = useState<QuestionFourType[]>([]);
   const { socket } = useContext(SocketContext);
+  const [listUserGame5, setListUserGame5] = useState<UserUpdateType[]>([]);
   const handleChangeData = (iduser: number, valueNumber: number) => {
     const newData = onChangeData(listUser, iduser, valueNumber);
     setListUser(newData);
   };
   useEffect(() => {
     socket.on("listUserServer4", (msg: UserType[]) => {
-      console.log(msg);
       const newData = convertScore(msg);
       setListUser(newData);
     });
     socket.on("questionUserServer4", (msg: QuestionFourType[]) => {
-      console.log(msg);
       setListQuestion([...msg]);
     });
     return () => {
-      socket.off("listUserServer3");
+      socket.off();
     };
   }, [socket]);
 
@@ -50,6 +49,14 @@ const Control4 = () => {
 
   const handleCancelStar = () => {
     socket.emit("cancelStart");
+  };
+
+  const handleSendUserGame5 = (idUser: number, value: boolean) => {
+    if (value) {
+      socket.emit("addUserGame5", idUser);
+    } else {
+      socket.emit("deleteUserGame5", idUser);
+    }
   };
 
   const columnsUser = [
@@ -101,6 +108,16 @@ const Control4 = () => {
       key: "id",
       render: (text: number, record: UserUpdateType) => (
         <Button onClick={() => handleStar(text)}>Ngôi sao hi vọng</Button>
+      ),
+    },
+    {
+      title: "Chọn thí sinh",
+      dataIndex: "id",
+      key: "id",
+      render: (text: number, record: UserUpdateType) => (
+        <Checkbox
+          onChange={(e) => handleSendUserGame5(record.id, e.target.checked)}
+        />
       ),
     },
   ];

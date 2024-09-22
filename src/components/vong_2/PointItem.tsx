@@ -22,7 +22,7 @@ const PointItem = ({ index, ans, name }: DataTypeProps) => {
 
   return (
     <div className="relative">
-      <div className="border-2 border-solid border-slate-200  bg-sky-800 h-1/2 px-4 py-6">
+      <div className="border-2 border-solid border-slate-200  baseColor h-1/2 px-4 py-6">
         <p className="text-white font-semibold text-2xl h-8">{ans}</p>
       </div>
       {handleCheckEven(index)}

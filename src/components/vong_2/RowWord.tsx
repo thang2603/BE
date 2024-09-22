@@ -15,7 +15,7 @@ const RowWord = ({ listQuestion }: DataTypeProps) => {
     return "opacity-0";
   };
   return (
-    <div className="px-5 border-2 border-solid border-slate-200 bg-sky-800 relative py-10 min-w-[500px]">
+    <div className="px-5 border-2 border-solid border-slate-200 baseColor relative py-10 min-w-[500px]">
       <p className="absolute bg-cyan-600 text-white -top-4 left-1/2 -translate-x-1/2 text-xl px-1 py-1 border-2 border-solid border-slate-200 ">
         Chướng ngại vật có 7 chữ
       </p>
@@ -25,10 +25,10 @@ const RowWord = ({ listQuestion }: DataTypeProps) => {
             word?.id < 5 && (
               <div key={word.id} className="flex gap-3 justify-between">
                 <div className="flex gap-1">
-                  {handleString(word.ans).map((item) => (
+                  {handleString(word.ans).map((item, indexItem) => (
                     <p
-                      key={`${item}_${index}`}
-                      className=" w-10 h-10 rounded-full border-2 border-solid border-slate-200 bg-sky-800 flex items-center justify-center"
+                      key={`${item}_${index}_${indexItem}`}
+                      className=" w-10 h-10 rounded-full border-2 border-solid border-slate-200 baseColor flex items-center justify-center"
                     >
                       <span
                         className={`text-white uppercase font-semibold ${handleShowWord(

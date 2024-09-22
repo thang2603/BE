@@ -42,7 +42,7 @@ const Control2 = () => {
     });
 
     return () => {
-      socket.off("listUserServer2");
+      socket.off();
     };
   }, [socket]);
 
@@ -74,10 +74,20 @@ const Control2 = () => {
   const handleShowImage = (id: number) => {
     socket.emit("showImage2", id);
   };
+
+  const handleChoseRow = () => {
+    socket.emit("choseRowControl", "nhac");
+  };
+
+  const handleAllWrong = () => {
+    socket.emit("allWrongControl", "nhac");
+  };
+
   const handleChangeData = (idUser: number, value: number) => {
     const newData = onChangeData(listUser, idUser, value);
     setListUser(newData);
   };
+
   const columns = [
     {
       title: "Họ và tên",
@@ -114,13 +124,16 @@ const Control2 = () => {
           </p>
           <p>Câu trả lời : {numberQuestion?.ans}</p>
         </div>
+        <div>
+          <Button onClick={handleChoseRow}>Phát nhạc chọn hàng ngang</Button>
+          <Button onClick={handleAllWrong}>Phát nhạc khi không ai đúng </Button>
+        </div>
         <div className="flex gap-3 flex-col">
           <div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
               <Button onClick={handleGetListUser}>
                 Lấy danh sách thí sinh
               </Button>
-
               <Button onClick={handleStart}>Bắt đầu tính thời gian</Button>
               <Button onClick={handleShowResult}>
                 Hiện thị câu trả lời của thí sinh

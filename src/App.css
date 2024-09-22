@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+.baseColor {
+  background: linear-gradient(
+    90deg,
+    rgba(69, 119, 204, 1) 0%,
+    rgba(231, 133, 212, 1) 100%
+  );
+}

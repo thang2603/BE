@@ -46,8 +46,7 @@ const ControlGroup = () => {
     });
 
     return () => {
-      socket.off("listUserServer");
-      socket.off("quesGame1Server");
+      socket.off();
     };
   }, [socket]);
   return (

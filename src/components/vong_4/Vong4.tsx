@@ -39,9 +39,7 @@ const Vong4 = () => {
       navigate("/wait-screen");
     });
     return () => {
-      socket.off("listUserServer4");
-      socket.off("sendQuestionServer4");
-      socket.off("startServer4");
+      socket.off();
     };
   }, [socket, navigate]);
 
@@ -68,7 +66,7 @@ const Vong4 = () => {
         </CountdownCircleTimer>
       </div>
       <div className="flex gap-6 justify-stretch h-52 ">
-        <Card className="flex-1  bg-sky-800 relative">
+        <Card className="flex-1  baseColor relative">
           <p className="text-2xl text-white pt-5">{question?.ques}</p>
           <div className=" flex gap-6 absolute  w-full -top-6 left-0">
             {listUser?.map((item) => (
@@ -76,14 +74,14 @@ const Vong4 = () => {
                 {star === item?.id && <MovingStar />}
                 <p
                   key={item?.fullName}
-                  className="text-center flex-1 text-white bg-sky-400 p-3 text-2xl"
+                  className="text-center flex-1 text-white bg-[#c972f4] p-3 text-2xl border border-solid border-white"
                 >{`${item?.fullName} (${item?.score})`}</p>
               </div>
             ))}
           </div>
         </Card>
-        <Card className="w-96 relative flex justify-center items-center bg-sky-800">
-          <div className="absolute text-center text-white bg-sky-400 p-3 text-2xl w-full -top-6 left-0">
+        <Card className="w-96 relative flex justify-center items-center baseColor">
+          <div className="absolute text-center text-white bg-[#c972f4] p-3 text-2xl w-full -top-6 left-0 border border-solid border-white">
             {`Câu ${question?.score} điểm`}
           </div>
           <p className="text-8xl text-white  ">{findByUser().score}</p>

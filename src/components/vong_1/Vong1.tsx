@@ -17,16 +17,21 @@ const Vong1 = () => {
   const [numberQuestion, setNumberQuestion] =
     useState<QuestionType>(INIT_QUESTION);
 
+  const handleShowName = () => {
+    const nameUser = listUser.find(
+      (item) => item?.id === numberQuestion?.idUser
+    );
+    return nameUser?.fullName || "";
+  };
   useEffect(() => {
+    socket.emit("listUserAndScore", "admin");
     socket.on("listUserAndScoreServer", (msg: UserType[]) => {
-      console.log(msg);
       setListUser([...msg]);
     });
     socket.on("quesGame1Server", (msg: any) => {
       setNumberQuestion({ ...msg });
     });
     socket.on("startTimeServer", (msg: UserType[]) => {
-      console.log(msg);
       setRestTime((pre) => pre + 1);
     });
     socket.on("nextGroupServer1", (msg: UserType[]) => {
@@ -36,8 +41,7 @@ const Vong1 = () => {
       navigate("/wait-screen");
     });
     return () => {
-      socket.off("listUserAndScoreServer");
-      socket.off("quesGame1Server");
+      socket.off();
     };
   }, [socket, navigate]);
 
@@ -57,11 +61,14 @@ const Vong1 = () => {
         <Card
           // title={`Câu hỏi ${numberQuestion.no}`}
           title={
-            <span className="text-white font-semibol">{`Câu hỏi ${numberQuestion.no}`}</span>
+            <div className="flex justify-between items-center">
+              <p className="text-white font-semibol">{`Câu hỏi ${numberQuestion.no}`}</p>
+              <p className="text-white font-semibol px-10">{`Lượt thi : ${handleShowName()}`}</p>
+            </div>
           }
-          className="flex-1 bg-sky-800 text-white"
+          className="flex-1  baseColor text-white"
         >
-          <p className="text-white">{numberQuestion.ques}</p>
+          <p className="text-white font-semibol">{numberQuestion.ques}</p>
         </Card>
         <div className="min-w-96 flex flex-col gap-2">
           {listUser.map((item) => (
@@ -75,7 +82,7 @@ const Vong1 = () => {
                     }
                   : {}
               }
-              className="flex gap-2 items-center justify-between bg-sky-800 text-white rounded-md p-2"
+              className="flex gap-2 items-center justify-between baseColor text-white rounded-md p-2"
             >
               <p className="font-semibold">{item.fullName}</p>
               <p className="w-7 font-semibold">{item?.score}</p>

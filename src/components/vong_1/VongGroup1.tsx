@@ -52,8 +52,7 @@ const VongGroup1 = () => {
       navigate("/wait-screen");
     });
     return () => {
-      socket.off("listUserServer");
-      socket.off("quesGame1Server");
+      socket.off();
     };
   }, [socket, navigate]);
 
@@ -70,25 +69,28 @@ const VongGroup1 = () => {
         >
           {Timer}
         </CountdownCircleTimer>
-        <Button
-          disabled={handleCheckDisable()}
-          onClick={() => hanlePressRung(user.id)}
-        >
-          Chuông
-        </Button>
+        {user?.role === "USER" && (
+          <Button
+            disabled={handleCheckDisable()}
+            onClick={() => hanlePressRung(user.id)}
+          >
+            Chuông
+          </Button>
+        )}
       </div>
       <div className="flex  gap-6 min-w-[1000px]">
         <Card
           title={
             <span className="text-white font-semibol">{`Câu hỏi ${numberQuestion.no}`}</span>
           }
-          className="flex-1 bg-sky-800"
+          className="flex-1 baseColor"
         >
           <p className="text-white font-semibold">{numberQuestion.ques}</p>
         </Card>
         <div className="min-w-96 flex flex-col gap-2 text-white">
           {listUser.map((item) => (
             <div
+              key={item.id}
               style={
                 item.id === idPress
                   ? {
@@ -97,7 +99,7 @@ const VongGroup1 = () => {
                     }
                   : {}
               }
-              className="flex gap-2 items-center justify-between bg-sky-800 text-white rounded-md p-2"
+              className="flex gap-2 items-center justify-between baseColor text-white rounded-md p-2"
             >
               <p className="font-semibold">{item.fullName}</p>
               <p className="w-7 font-semibold">{item?.score}</p>

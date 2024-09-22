@@ -16,22 +16,22 @@
 /* Điều chỉnh thời gian trễ và vị trí dọc của từng phần tử (từ thấp đến cao) */
 .element:nth-child(1) {
   animation-delay: 0.8s;
-  top: 55%; /* Phần tử đầu tiên thấp nhất */
+  top: 70%; /* Phần tử đầu tiên thấp nhất */
 }
 
 .element:nth-child(2) {
   animation-delay: 1.6s;
-  top: 40%; /* Phần tử thứ hai */
+  top: 55%; /* Phần tử thứ hai */
 }
 
 .element:nth-child(3) {
   animation-delay: 2.4s;
-  top: 25%; /* Phần tử thứ ba */
+  top: 40%; /* Phần tử thứ ba */
 }
 
 .element:nth-child(4) {
   animation-delay: 3.2s;
-  top: 10%; /* Phần tử thứ tư cao nhất */
+  top: 25%; /* Phần tử thứ tư cao nhất */
 }
 
 /* Hiệu ứng trượt vào giữa */

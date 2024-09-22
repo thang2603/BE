@@ -19,6 +19,7 @@ import { UserType } from "../../context/UserContext";
 import { convertOption } from "../../constants/until";
 import { QuestionTypeBody } from "./../../types/Login";
 import { INIT_QUESTION_BODY } from "../../constants/constants";
+import TextArea from "antd/es/input/TextArea";
 
 const Question1 = () => {
   const { socket } = useContext(SocketContext);
@@ -49,8 +50,7 @@ const Question1 = () => {
     });
 
     return () => {
-      socket.off("listUserServer");
-      socket.off("quesGame1Server");
+      socket.off();
     };
   }, [socket]);
 
@@ -151,7 +151,8 @@ const Question1 = () => {
         autoComplete="off"
       >
         <Form.Item label="Câu hỏi" className="flex-1">
-          <Input onChange={(e) => onChangeData(e.target.value, "ques")}></Input>
+          {/* <Input onChange={(e) => onChangeData(e.target.value, "ques")}></Input> */}
+          <TextArea onChange={(e) => onChangeData(e.target.value, "ques")} />
         </Form.Item>
         <Form.Item label="Câu trả lời" className="flex-1">
           <Input onChange={(e) => onChangeData(e.target.value, "ans")}></Input>
@@ -201,10 +202,14 @@ const Question1 = () => {
           autoComplete="off"
         >
           <Form.Item label="Câu hỏi" className="flex-1">
-            <Input
+            {/* <Input
               onChange={(e) => onChangeDataEdit(e.target.value, "ques")}
               value={dataDetail?.ques}
-            ></Input>
+            ></Input> */}
+            <TextArea
+              onChange={(e) => onChangeDataEdit(e.target.value, "ques")}
+              value={dataDetail?.ques}
+            />
           </Form.Item>
           <Form.Item label="Câu trả lời" className="flex-1">
             <Input

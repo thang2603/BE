@@ -30,30 +30,11 @@ const Vong5 = () => {
   };
 
   useEffect(() => {
-    socket.emit("listUserAndScore", "admin");
-    socket.on("listUserAndScoreServer", (msg: UserType[]) => {
-      setListUser([...msg]);
-    });
-
-    socket.on("questionGroupServer", (msg: any) => {
-      setNumberQuestion({ ...msg });
-    });
-
-    socket.on("startTimeServer", (msg: UserType[]) => {
-      setIdPress(0);
-      setRestTime((pre) => pre + 1);
-    });
-
-    socket.on("pressRung1Server", (msg: number) => {
-      setIdPress(msg);
-    });
-
     socket.on("nextWaitScreenServer", (msg: string) => {
       navigate("/wait-screen");
     });
     return () => {
-      socket.off("listUserServer");
-      socket.off("quesGame1Server");
+      socket.off();
     };
   }, [socket, navigate]);
 
@@ -82,13 +63,14 @@ const Vong5 = () => {
           title={
             <span className="text-white font-semibol">{`Câu hỏi ${numberQuestion.no}`}</span>
           }
-          className="flex-1 bg-sky-800"
+          className="flex-1 baseColor"
         >
           <p className="text-white font-semibold">{numberQuestion.ques}</p>
         </Card>
         <div className="min-w-96 flex flex-col gap-2 text-white">
           {listUser.map((item) => (
             <div
+              key={item?.id}
               style={
                 item.id === idPress
                   ? {
@@ -97,7 +79,7 @@ const Vong5 = () => {
                     }
                   : {}
               }
-              className="flex gap-2 items-center justify-between bg-sky-800 text-white rounded-md p-2"
+              className="flex gap-2 items-center justify-between baseColor text-white rounded-md p-2"
             >
               <p className="font-semibold">{item.fullName}</p>
               <p className="w-7 font-semibold">{item?.score}</p>

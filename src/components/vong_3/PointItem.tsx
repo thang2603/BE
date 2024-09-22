@@ -8,7 +8,7 @@ interface DataTypeProps {
 const PointItem = ({ index, ans, name, time }: DataTypeProps) => {
   return (
     <div className="relative" key={name}>
-      <div className="border-2 border-solid border-slate-200  bg-sky-800 h-1/2 px-4 py-6">
+      <div className="border-2 border-solid border-slate-200  baseColor h-1/2 px-4 py-6">
         <div className="flex justify-between items-center">
           <p className="text-white font-semibold text-2xl h-8">{ans}</p>
           <p className="text-white font-semibold text-2xl h-8">{time || 0}</p>

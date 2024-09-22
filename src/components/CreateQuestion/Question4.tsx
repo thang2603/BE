@@ -43,13 +43,12 @@ const Question4 = () => {
       setListUser(convertOption(msg, "id", "fullName"));
     });
     socket.on("getAllQuestionServer4", (msg: QuestionType[]) => {
-      if (isOpenModal) handleCloseModal();
+      handleCloseModal();
       setListQuestion([...msg]);
     });
 
     return () => {
-      socket.off("listUserServer");
-      socket.off("quesGame1Server");
+      socket.off();
     };
   }, [socket]);
 

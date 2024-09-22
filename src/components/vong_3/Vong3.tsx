@@ -51,8 +51,7 @@ const Vong3 = () => {
       navigate("/wait-screen");
     });
     return () => {
-      socket.off("listUserServer2");
-      socket.off("quesGame1Server");
+      socket.off();
     };
   }, [socket, navigate]);
 
@@ -72,16 +71,16 @@ const Vong3 = () => {
       {listAnswer.length > 0 ? (
         <ShowPoint listAnswer={listAnswer} />
       ) : (
-        <div className="flex gap-20 justify-center items-center p-20">
+        <div className="flex gap-20 justify-center  p-20">
           <div className="">
             <div className="flex flex-col gap-2 w-[900px]">
-              <Card className="bg-sky-800 text-white">
+              <Card className="baseColor text-white">
                 <Typography className="text-white text-xl">
                   {numberQuestion.ques}
                 </Typography>
               </Card>
 
-              <Card className="flex bg-sky-800 justify-center">
+              <Card className="flex baseColor justify-center">
                 <div className="w-[800px] h-[600px]">
                   {resetTime.isPlaying && (
                     <ImageCarousel
@@ -105,15 +104,25 @@ const Vong3 = () => {
             >
               {Timer}
             </CountdownCircleTimer>
-            <div>
-              <Input
-                placeholder="Nhập câu trả lời"
-                size="large"
-                className="p-8 flex-1 text-2xl"
-                onChange={(e) => setAnswer(e?.target?.value)}
-              />
-              <Button onClick={handleSubmit}>Gửi câu trả lời</Button>
-            </div>
+            {user?.role === "USER" && (
+              <div>
+                <Input
+                  placeholder="Nhập câu trả lời"
+                  size="large"
+                  className="p-8 flex-1 text-2xl"
+                  onChange={(e) => setAnswer(e?.target?.value)}
+                />
+                <Button onClick={handleSubmit}>Gửi câu trả lời</Button>
+              </div>
+            )}
+            {user?.role === "MC" && (
+              <div>
+                <Card title="Đáp an">
+                  <p>{numberQuestion?.ans}</p>
+                </Card>
+              </div>
+            )}
+            <div></div>
           </div>
         </div>
       )}

@@ -1,6 +1,6 @@
-import React, { ReactNode, useContext } from "react";
+import React, { ReactNode, useContext, useState } from "react";
 
-import { Button, Card, Popconfirm } from "antd";
+import { Button, Card, Input, Popconfirm } from "antd";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../../context/SocketContext";
 
@@ -9,17 +9,22 @@ interface DataTypeProps {
 }
 const PageQuestion = ({ children }: DataTypeProps) => {
   const navigate = useNavigate();
+  const [mess, setMess] = useState<string>("");
   const { socket } = useContext(SocketContext);
   const handleNavigate = (url: string) => {
     navigate(url);
   };
 
   const handleNextWaitScreen = () => {
-    socket.emit("nextWaitScreen");
+    socket.emit("nextWaitScreen", "next");
   };
 
   const handleCreateData = () => {
-    socket.emit("createTableDatabase");
+    socket.emit("createTableDatabase", "create");
+  };
+
+  const handleSendMess = () => {
+    if (!!mess) socket.emit("sendMessFromTech", mess);
   };
 
   return (
@@ -69,6 +74,10 @@ const PageQuestion = ({ children }: DataTypeProps) => {
             >
               <Button>Chuyển qua màn hình chờ</Button>
             </Popconfirm>
+          </div>
+          <div className="flex gap-2">
+            <Input onChange={(e) => setMess(e.target.value)} allowClear />
+            <Button onClick={handleSendMess}>Gửi tin nhắn</Button>
           </div>
         </div>
       </Card>
