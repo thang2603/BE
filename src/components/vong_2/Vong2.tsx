@@ -31,6 +31,8 @@ const Vong2 = () => {
   const audioChoseRow = useRef<HTMLAudioElement>(null);
   const audioWrongRow = useRef<HTMLAudioElement>(null);
   const audioPictureReveal = useRef<HTMLAudioElement>(null);
+  const audioAnswerShowing = useRef<HTMLAudioElement>(null);
+  const audioCorrectObstacle = useRef<HTMLAudioElement>(null);
   const handleEndAuioStart = () => {
     audioRowShow?.current?.play().catch((error) => {
       console.log("Playback prevented:", error);
@@ -72,8 +74,12 @@ const Vong2 = () => {
     });
 
     socket.on("showResultServer2", (msg: AnserDetailType[]) => {
+      console.log("show answer");
       setListAnswer([...msg]);
       setRestTime(0);
+      audioAnswerShowing?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
     });
 
     socket.on("nextWaitScreenServer", (msg: string) => {
@@ -91,7 +97,11 @@ const Vong2 = () => {
         console.log("Playback prevented:", error);
       });
     });
-
+    socket.on("correctObstacleServer", (msg: string) => {
+      audioCorrectObstacle?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
+    });
     return () => {
       socket.off();
     };
@@ -107,7 +117,9 @@ const Vong2 = () => {
   return (
     <div>
       {listAnswer?.length > 0 ? (
-        <ShowPoint listAnswer={listAnswer} />
+        <div>
+          <ShowPoint listAnswer={listAnswer} />
+        </div>
       ) : (
         <div className="flex flex-col justify-between gap-8 h-screen p-16 overflow-hidden">
           <div className="absolute">
@@ -215,6 +227,13 @@ const Vong2 = () => {
           </div>
         </div>
       )}
+      <div className="absolute">
+        <audio
+          ref={audioCorrectObstacle}
+          src={`/vong2/CorrectObstacle.mp3`}
+          onEnded={handleEndAuioStart}
+        />
+      </div>
     </div>
   );
 };

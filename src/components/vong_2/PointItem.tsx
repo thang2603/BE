@@ -2,9 +2,10 @@ interface DataTypeProps {
   index: number;
   name: string;
   ans: string;
+  color: string;
 }
 
-const PointItem = ({ index, ans, name }: DataTypeProps) => {
+const PointItem = ({ index, ans, name, color }: DataTypeProps) => {
   const handleCheckEven = (index: number) => {
     if (index % 2 === 1) {
       return (
@@ -22,7 +23,10 @@ const PointItem = ({ index, ans, name }: DataTypeProps) => {
 
   return (
     <div className="relative">
-      <div className="border-2 border-solid border-slate-200  baseColor h-1/2 px-4 py-6">
+      <div
+        className="border-2 border-solid border-slate-200  baseColor h-1/2 px-4 py-6"
+        style={{ background: color }}
+      >
         <p className="text-white font-semibold text-2xl h-8">{ans}</p>
       </div>
       {handleCheckEven(index)}

@@ -83,6 +83,10 @@ const Control2 = () => {
     socket.emit("allWrongControl", "nhac");
   };
 
+  const handleCorrectObstacle = () => {
+    socket.emit("correctObstacle", "nhac1");
+  };
+
   const handleChangeData = (idUser: number, value: number) => {
     const newData = onChangeData(listUser, idUser, value);
     setListUser(newData);
@@ -117,16 +121,19 @@ const Control2 = () => {
 
   return (
     <div className="flex ">
-      <Card title="Control">
+      <Card title="Control" className="flex flex-col gap-2">
         <div>
           <p>
             Câu hỏi {numberQuestion?.no}: {numberQuestion?.ques}
           </p>
           <p>Câu trả lời : {numberQuestion?.ans}</p>
         </div>
-        <div>
+        <div className="flex gap-2 py-2">
           <Button onClick={handleChoseRow}>Phát nhạc chọn hàng ngang</Button>
           <Button onClick={handleAllWrong}>Phát nhạc khi không ai đúng </Button>
+          <Button onClick={handleCorrectObstacle}>
+            Phát nhạc đúng chướng ngại vật
+          </Button>
         </div>
         <div className="flex gap-3 flex-col">
           <div>
