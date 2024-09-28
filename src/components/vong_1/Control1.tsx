@@ -41,6 +41,26 @@ const Control1 = () => {
     socket.emit("nextGroup1", "next1");
   };
 
+  const handleStarTurn = () => {
+    socket.emit("startTurnControl", "start");
+  };
+
+  const handlePreMainTime = () => {
+    socket.emit("preMainTimeControl", "start");
+  };
+
+  const handleCorrectAnswer = () => {
+    socket.emit("correctAnswerControl1", "start");
+  };
+
+  const handleWrongAnswer = () => {
+    socket.emit("wrongAnswerControl1", "start");
+  };
+
+  const handleFinishTurn = () => {
+    socket.emit("finishTurnrControl1", "start");
+  };
+
   useEffect(() => {
     socket.on("listUserAndScoreServer", (msg: UserType[]) => {
       setListUser([...msg]);
@@ -125,7 +145,19 @@ const Control1 = () => {
         <p>Câu trả lời : {numberQuestion.ans}</p>
       </div>
       <div className="flex gap-3 flex-col">
-        <div>
+        <div className="flex gap-2 flex-col">
+          <div className="flex gap-2 flex-wrap">
+            <Button onClick={handleStarTurn}>Âm thanh bắt đầu lượt thi</Button>
+            <Button onClick={handlePreMainTime}>
+              Âm thanh thời gian trước khi bắt đầu
+            </Button>
+            <Button onClick={handlePreMainTime}>
+              Âm thanh thời gian bắt đầu thi
+            </Button>
+            <Button onClick={handleCorrectAnswer}>Âm thanh trả lời đúng</Button>
+            <Button onClick={handleWrongAnswer}>Âm thanh trả lời sai</Button>
+            <Button onClick={handleFinishTurn}>Kết thúc lượt thi</Button>
+          </div>
           <div className="flex gap-2">
             <Button onClick={handleGetListUser}>Lấy danh sách thí sinh</Button>
             <Button onClick={handleStart}>Bắt đầu tính thời gian</Button>

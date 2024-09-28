@@ -1,0 +1,43 @@
+.container {
+  position: relative;
+  height: 100vh; /* Đảm bảo chiều cao toàn màn hình */
+}
+
+/* Thiết lập ban đầu cho các phần tử */
+.elementVong1 {
+  width: 400px;
+  opacity: 0; /* Ẩn ban đầu */
+  position: absolute; /* Vị trí tuyệt đối để định vị chính xác */
+  left: -150px; /* Bắt đầu từ ngoài màn hình bên trái */
+  animation: slideIn 1s forwards; /* Áp dụng hiệu ứng di chuyển */
+}
+
+/* Điều chỉnh thời gian trễ và vị trí dọc của từng phần tử (từ thấp đến cao) */
+.elementVong1:nth-child(4) {
+  animation-delay: 0.8s;
+  top: 70%; /* Phần tử đầu tiên thấp nhất */
+}
+
+.elementVong1:nth-child(3) {
+  animation-delay: 1.6s;
+  top: 55%; /* Phần tử thứ hai */
+}
+
+.elementVong1:nth-child(2) {
+  animation-delay: 2.4s;
+  top: 40%; /* Phần tử thứ ba */
+}
+
+.elementVong1:nth-child(1) {
+  animation-delay: 3.2s;
+  top: 25%; /* Phần tử thứ tư cao nhất */
+}
+
+/* Hiệu ứng trượt vào giữa */
+@keyframes slideIn {
+  to {
+    left: 50%; /* Vị trí giữa màn hình */
+    transform: translateX(-0%); /* Căn giữa phần tử theo chiều ngang */
+    opacity: 1; /* Hiển thị sau khi di chuyển */
+  }
+}
