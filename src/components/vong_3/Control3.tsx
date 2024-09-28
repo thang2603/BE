@@ -64,6 +64,28 @@ const Control3 = () => {
     socket.emit("showResult3", "showResult");
   };
 
+  const handleStartRound = () => {
+    socket.emit("startRound3", "startRound3");
+  };
+
+  const handleStartQuestion = () => {
+    socket.emit("startSoundQuestion3", "startRound3");
+  };
+  const handleCorrect = () => {
+    socket.emit("soundCorrect3", "soundCorrect3");
+  };
+  const handle10Second = () => {
+    socket.emit("sound10Second", "sound10Second");
+  };
+  const handle20Second = () => {
+    socket.emit("sound20Second", "sound20Second");
+  };
+  const handle30Second = () => {
+    socket.emit("sound30Second", "sound30Second");
+  };
+  const handle40Second = () => {
+    socket.emit("sound40Second", "sound40Second");
+  };
   const columns = [
     {
       title: "Họ và tên",
@@ -112,6 +134,19 @@ const Control3 = () => {
         </div>
         <div className="flex gap-3 flex-col">
           <div className="flex flex-col gap-2">
+            <div className="flex  gap-2">
+              <Button onClick={handleStartRound}>
+                Âm thanh bắt đầu vòng thi
+              </Button>
+              <Button onClick={handleStartQuestion}>
+                Âm thanh bắt đầu câu hỏi
+              </Button>
+              <Button onClick={handleCorrect}>Âm thanh trả lời đúng</Button>
+              <Button onClick={handle10Second}>Âm thanh 10 giây</Button>
+              <Button onClick={handle20Second}>Âm thanh 20 giây</Button>
+              <Button onClick={handle30Second}>Âm thanh 30 giây</Button>
+              <Button onClick={handle40Second}>Âm thanh 40 giây</Button>
+            </div>
             <div className="flex gap-4">
               <Button onClick={handleGetListUser}>
                 Lấy danh sách thí sinh
@@ -120,7 +155,7 @@ const Control3 = () => {
               <Button onClick={handleShowResult}>
                 Hiện thị câu trả lời của thí sinh
               </Button>
-              <Button onClick={updateScore}>Cập nhật</Button>
+              <Button onClick={updateScore}>Cập nhật điểm</Button>
               <Popconfirm
                 title="Bạn có muốn chuyển qua vòng 4 không ?"
                 onConfirm={handleNextGame4}

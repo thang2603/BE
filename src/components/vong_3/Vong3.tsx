@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import Timer from "../Timer/Timer";
 import { Button, Card, Input, Typography } from "antd";
@@ -21,10 +21,17 @@ const Vong3 = () => {
     duration: 25,
   });
   const { user } = useContext(UserContext);
+
+  const audioStartRound = useRef<HTMLAudioElement>(null);
+  const audioStartQuestion = useRef<HTMLAudioElement>(null);
+  const audioStart10Second = useRef<HTMLAudioElement>(null);
+  const audioStart20Second = useRef<HTMLAudioElement>(null);
+  const audioStart30Second = useRef<HTMLAudioElement>(null);
+  const audioStart40Second = useRef<HTMLAudioElement>(null);
+
   const [answer, setAnswer] = useState<string>("");
   const [updateTime, setUpdateTime] = useState<number>(15);
   const [listAnswer, setListAnswer] = useState<AnserDetailType[]>([]);
-
   const [numberQuestion, setNumberQuestion] =
     useState<QuestionType3>(INIT_QUESTION_3);
 
@@ -50,6 +57,43 @@ const Vong3 = () => {
     socket.on("nextWaitScreenServer", (msg: string) => {
       navigate("/wait-screen");
     });
+
+    socket.on("startRoundServer3", async (msg: any) => {
+      audioStartRound?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
+    });
+
+    socket.on("startSoundQuestionServer3", async (msg: any) => {
+      audioStartQuestion?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
+    });
+
+    socket.on("sound10SecondServer3", async (msg: any) => {
+      audioStart10Second?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
+    });
+
+    socket.on("sound20SecondServer3", async (msg: any) => {
+      audioStart20Second?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
+    });
+
+    socket.on("sound30SecondServer3", async (msg: any) => {
+      audioStart30Second?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
+    });
+
+    socket.on("sound40SecondServer3", async (msg: any) => {
+      audioStart40Second?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
+    });
+
     return () => {
       socket.off();
     };
@@ -123,6 +167,44 @@ const Vong3 = () => {
               </div>
             )}
             <div></div>
+          </div>
+          <div>
+            <div className="absolute">
+              <audio
+                ref={audioStartRound}
+                src={`/vong3/sound/StartRound.mp3`}
+              />
+            </div>
+            <div className="absolute">
+              <audio
+                ref={audioStartQuestion}
+                src={`/vong3/sound/QuestionShowing.mp3`}
+              />
+            </div>
+            <div className="absolute">
+              <audio
+                ref={audioStart10Second}
+                src={`/vong3/sound/10Seconds.mp3`}
+              />
+            </div>
+            <div className="absolute">
+              <audio
+                ref={audioStart20Second}
+                src={`/vong3/sound/20Seconds.mp3`}
+              />
+            </div>
+            <div className="absolute">
+              <audio
+                ref={audioStart30Second}
+                src={`/vong3/sound/30Seconds.mp3`}
+              />
+            </div>
+            <div className="absolute">
+              <audio
+                ref={audioStart40Second}
+                src={`/vong3/sound/40Seconds.mp3`}
+              />
+            </div>
           </div>
         </div>
       )}
