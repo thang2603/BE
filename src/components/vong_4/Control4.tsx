@@ -5,11 +5,13 @@ import { Button, Checkbox, Input, Table } from "antd";
 import { SocketContext } from "../../context/SocketContext";
 import { convertScore, onChangeData } from "../../constants/until";
 
+export const INIT_OPTION = [20, 20, 20];
 const Control4 = () => {
   const [listUser, setListUser] = useState<UserUpdateType[]>([]);
   const [listQuestion, setListQuestion] = useState<QuestionFourType[]>([]);
   const { socket } = useContext(SocketContext);
   const [listUserGame5, setListUserGame5] = useState<UserUpdateType[]>([]);
+  const [option, setOption] = useState<number[]>(INIT_OPTION);
   const handleChangeData = (iduser: number, valueNumber: number) => {
     const newData = onChangeData(listUser, iduser, valueNumber);
     setListUser(newData);
@@ -43,6 +45,13 @@ const Control4 = () => {
     socket.emit("updateScore4", listUser);
   };
 
+  const handleStartTime = () => {
+    socket.emit("startTime4", listUser);
+  };
+
+  const handleFinishTurn = () => {
+    socket.emit("finishTurn4", listUser);
+  };
   const handleStar = (idUser: number) => {
     socket.emit("start", idUser);
   };
@@ -59,12 +68,31 @@ const Control4 = () => {
     }
   };
 
+  const handleChangOption = (value: number, numberOption: number) => {
+    const newData = [...option].map((item, index) =>
+      index === numberOption ? value : item
+    );
+    socket.emit("optionQuestion4", newData);
+    setOption([...newData]);
+  };
+
+  const handleStartTurn = () => {
+    socket.emit("startTurn4", "start");
+  };
+
+  const handleCorrectFinish = () => {
+    socket.emit("correctFinish4", "start");
+  };
+  const handleWrongFinish = () => {
+    socket.emit("wrongFinish4", "start");
+  };
   const columnsUser = [
     {
       title: "Họ và tên",
       dataIndex: "fullName",
       key: "fullName",
     },
+
     {
       title: "Tổng điểm hiên tại",
       dataIndex: "score",
@@ -167,11 +195,53 @@ const Control4 = () => {
   return (
     <div className="p-8 flex flex-col gap-2">
       <div className="flex gap-4">
-        <Button onClick={handleGetListUser}>Danh sách thí sinh</Button>
-        <Button onClick={updateScore}>Cập nhật điểm</Button>
-        <Button onClick={handleCancelStar}>Huỷ ngôi sao hi vọng</Button>
+        <div>
+          <div>
+            <Button onClick={handleStartTurn}>Bắt đầu lượt thi</Button>
+            <Button onClick={handleCorrectFinish}>Trả lời đúng</Button>
+            <Button onClick={handleWrongFinish}>Trả lời sai</Button>
+            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
+            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
+            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
+            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
+            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
+            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
+          </div>
+          <div className="flex gap-4">
+            <Button onClick={handleGetListUser}>Danh sách thí sinh</Button>
+            <Button onClick={updateScore}>Cập nhật điểm</Button>
+            <Button onClick={handleCancelStar}>Huỷ ngôi sao hi vọng</Button>
+            <Button onClick={handleStartTime}>Bắt đầu tính thời gian</Button>
+            <Button onClick={handleFinishTurn}>Kết thúc lượt thi</Button>
+          </div>
+        </div>
+
+        <div className="flex gap-8 bg-slate-50 p-5 rounded-lg">
+          {option.map((item, index) => (
+            <div className="flex items-center gap-2 ">
+              <p>Câu {index + 1}</p>
+              <div className="flex gap-2">
+                <div className="flex flex-col gap-1">
+                  <span>20</span>
+                  <Checkbox
+                    checked={item === 20}
+                    onChange={() => handleChangOption(20, index)}
+                  />
+                </div>
+                <div className="flex flex-col gap-1 ">
+                  <span>30</span>
+                  <Checkbox
+                    checked={item === 30}
+                    onChange={() => handleChangOption(30, index)}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="flex gap-8 ">
+
+      <div className="flex gap-8 flex-col ">
         <Table columns={columnsUser} dataSource={listUser} pagination={false} />
         <Table columns={columns} dataSource={listQuestion} pagination={false} />
       </div>

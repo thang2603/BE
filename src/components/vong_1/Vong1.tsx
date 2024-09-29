@@ -161,7 +161,6 @@ const Vong1 = () => {
             <div className="absolute">
               <audio ref={audioMainTime} src={`/vong1/MainTime.mp3`} />
             </div>
-
             <div className="absolute">
               <audio
                 ref={audioCorrectAnswer}

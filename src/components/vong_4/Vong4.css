@@ -1,0 +1,19 @@
+/* App.css */
+.video-container {
+  position: fixed; /* Video sẽ được cố định trên màn hình */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Chiều rộng 100% viewport */
+  height: 100vh; /* Chiều cao 100% viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black; /* Màu nền đen giống YouTube */
+  z-index: 1000; /* Đảm bảo video ở phía trên các phần tử khác */
+}
+
+.video-fullscreen {
+  width: 100%; /* Chiều rộng đầy đủ */
+  height: 100%; /* Chiều cao đầy đủ */
+  object-fit: cover; /* Giữ tỷ lệ video và làm đầy khung hình */
+}
