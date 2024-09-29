@@ -48,6 +48,9 @@ const PageQuestion = ({ children }: DataTypeProps) => {
             <Button onClick={() => handleNavigate("/create/4")}>
               Tạo câu hỏi vòng 4
             </Button>
+            <Button onClick={() => handleNavigate("/create/5")}>
+              Tạo câu hỏi vòng 5
+            </Button>
             <Button onClick={() => handleNavigate("/createUser")}>
               Tạo tài khoản thí sinh
             </Button>
@@ -56,7 +59,7 @@ const PageQuestion = ({ children }: DataTypeProps) => {
             <Button onClick={() => handleNavigate("/vong/1/control")}>
               Kĩ thuật vòng 1 thi riêng
             </Button>
-            <Button onClick={() => handleNavigate("/vong/1/control")}>
+            <Button onClick={() => handleNavigate("/vong-group/1/control")}>
               Kĩ thuật vòng 1 thi chung
             </Button>
             <Button onClick={() => handleNavigate("/vong/2/control")}>
@@ -67,6 +70,9 @@ const PageQuestion = ({ children }: DataTypeProps) => {
             </Button>
             <Button onClick={() => handleNavigate("/vong/4/control")}>
               Kĩ thuật vòng 4
+            </Button>
+            <Button onClick={() => handleNavigate("/vong/5/control")}>
+              Kĩ thuật vòng 5
             </Button>
             <Popconfirm
               title="Bạn có muốn chuyển qua màn hình chờ không?"

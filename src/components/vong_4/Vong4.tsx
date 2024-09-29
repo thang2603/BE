@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import Timer from "../Timer/Timer";
-import { Card } from "antd";
-import { UserUpdateType } from "../../context/UserContext";
+import { Button, Card } from "antd";
+import { UserContext, UserUpdateType } from "../../context/UserContext";
 import { SocketContext } from "../../context/SocketContext";
 import { QuestionFourType } from "../../types/Login";
 import { INIT_QUESTION_FOUR } from "../../constants/constants";
@@ -14,6 +14,7 @@ import { INIT_OPTION } from "./Control4";
 import FinishTurn from "../vong_1/FinishTurn";
 const Vong4 = () => {
   const { socket } = useContext(SocketContext);
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [resetTime, setRestTime] = useState<number>(0);
   const [listUser, setListUser] = useState<UserUpdateType[]>([]);
@@ -23,6 +24,7 @@ const Vong4 = () => {
   const [listOption, setListOption] = useState<number[]>(INIT_OPTION);
   const [star, setStar] = useState<number>(0);
 
+  const [userPress, setUserPress] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioStartRound = useRef<HTMLAudioElement>(null);
   const audioStartTurn = useRef<HTMLAudioElement>(null);
@@ -30,6 +32,8 @@ const Vong4 = () => {
   const audioWrongFinish = useRef<HTMLAudioElement>(null);
   const audio15Second = useRef<HTMLAudioElement>(null);
   const audioPackageChose = useRef<HTMLAudioElement>(null);
+  const audioStarChose = useRef<HTMLAudioElement>(null);
+
   const handlePlayVideo = () => {
     videoRef?.current?.play().catch((error) => {
       console.error("Error playing video:", error);
@@ -44,6 +48,15 @@ const Vong4 = () => {
     return 20;
   };
 
+  const handlePressRung = () => {
+    socket.emit("pressRung4", user?.id);
+  };
+
+  const isDisableRung = () => {
+    if (userPress === 0) return false;
+    if (user?.id === userPress) return false;
+    return true;
+  };
   useEffect(() => {
     audioStartRound?.current?.play().catch((error) => {
       console.log("Playback prevented:", error);
@@ -56,10 +69,14 @@ const Vong4 = () => {
 
     socket.on("sendQuestionServer4", (msg: QuestionFourType) => {
       setQuestion({ ...msg });
+      setUserPress(0);
     });
 
     socket.on("startServer4", (msg: number) => {
       setStar(msg);
+      audioStarChose?.current?.play().catch((error) => {
+        console.log("Playback prevented:", error);
+      });
     });
 
     socket.on("cancelStartServer4", (msg: number) => {
@@ -106,6 +123,9 @@ const Vong4 = () => {
         console.log("Playback prevented:", error);
       });
     });
+    socket.on("pressRungServer4", (msg: number) => {
+      setUserPress(msg);
+    });
     return () => {
       socket.off();
     };
@@ -138,16 +158,24 @@ const Vong4 = () => {
                 {!question.id ? (
                   <PackQuestion listOption={listOption} />
                 ) : (
-                  <CountdownCircleTimer
-                    key={resetTime}
-                    isPlaying={!!resetTime}
-                    duration={handleTimeQuestion()}
-                    colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-                    colorsTime={[10, 6, 3, 0]}
-                    // onComplete={() => handleNextQuestion(resetTimer)}
-                  >
-                    {Timer}
-                  </CountdownCircleTimer>
+                  <div className="flex items-center gap-6">
+                    <Button
+                      onClick={handlePressRung}
+                      disabled={isDisableRung()}
+                    >
+                      Chuông
+                    </Button>
+                    <CountdownCircleTimer
+                      key={resetTime}
+                      isPlaying={!!resetTime}
+                      duration={handleTimeQuestion()}
+                      colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                      colorsTime={[10, 6, 3, 0]}
+                      // onComplete={() => handleNextQuestion(resetTimer)}
+                    >
+                      {Timer}
+                    </CountdownCircleTimer>
+                  </div>
                 )}
               </div>
               <div className="flex gap-6 justify-stretch h-52 ">
@@ -155,9 +183,16 @@ const Vong4 = () => {
                   <p className="text-2xl text-white pt-5">{question?.ques}</p>
                   <div className=" flex gap-6 absolute  w-full -top-6 left-0">
                     {listUser?.map((item) => (
-                      <div className="w-full bg-slate-700 relative">
+                      <div
+                        className="w-full bg-slate-700 relative"
+                        key={item?.id}
+                      >
                         {star === item?.id && <MovingStar />}
                         <p
+                          style={{
+                            backgroundColor:
+                              userPress === item?.id ? "red" : "",
+                          }}
                           key={item?.fullName}
                           className="text-center flex-1 text-white bg-[#c972f4] p-3 text-2xl border border-solid border-white"
                         >{`${item?.fullName} (${item?.score})`}</p>
@@ -201,6 +236,12 @@ const Vong4 = () => {
                   <audio
                     ref={audioPackageChose}
                     src={`/vong4/sound/PackageChoose.mp3`}
+                  />
+                </div>
+                <div className="absolute">
+                  <audio
+                    ref={audioStarChose}
+                    src={`/vong4/sound/StarChoose.mp3`}
                   />
                 </div>
                 {question.score === 20 ? (

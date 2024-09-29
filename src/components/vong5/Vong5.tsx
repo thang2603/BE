@@ -5,9 +5,9 @@ import { Button, Card } from "antd";
 import { SocketContext } from "../../context/SocketContext";
 import { UserType } from "../../context/UserContext";
 import { INIT_QUESTION } from "../../constants/constants";
-import { QuestionType } from "../../types/Login";
 import { UserContext } from "./../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { QuestionType5 } from "../CreateQuestion/Question5";
 
 const Vong5 = () => {
   const { socket } = useContext(SocketContext);
@@ -17,10 +17,11 @@ const Vong5 = () => {
   const [resetTime, setRestTime] = useState<number>(0);
   const [idPress, setIdPress] = useState<number>(0);
   const [numberQuestion, setNumberQuestion] =
-    useState<QuestionType>(INIT_QUESTION);
+    useState<QuestionType5>(INIT_QUESTION);
 
   const hanlePressRung = (idUser: number) => {
-    socket.emit(`pressRung1`, idUser);
+    socket.emit(`pressRung5`, idUser);
+    setIdPress(idUser);
   };
 
   const handleCheckDisable = () => {
@@ -30,8 +31,17 @@ const Vong5 = () => {
   };
 
   useEffect(() => {
-    socket.on("nextWaitScreenServer", (msg: string) => {
-      navigate("/wait-screen");
+    socket.emit("listUserGame5", "listUser");
+    socket.on("questionServer5", (msg: QuestionType5) => {
+      setNumberQuestion(msg);
+      setRestTime((pre) => pre + 1);
+    });
+
+    socket.on("listUserGameServer5", (msg: UserType[]) => {
+      setListUser([...msg]);
+    });
+    socket.on("pressRungServer5", (msg: number) => {
+      setIdPress(msg);
     });
     return () => {
       socket.off();
@@ -40,7 +50,13 @@ const Vong5 = () => {
 
   return (
     <div className="flex flex-col justify-end gap-8 h-screen p-10">
-      <div className=" flex justify-between items-center">
+      <div className=" flex justify-end gap-3 items-center">
+        <Button
+          disabled={handleCheckDisable()}
+          onClick={() => hanlePressRung(user.id)}
+        >
+          Chuông
+        </Button>
         <CountdownCircleTimer
           key={resetTime}
           isPlaying={!!resetTime}
@@ -51,46 +67,31 @@ const Vong5 = () => {
         >
           {Timer}
         </CountdownCircleTimer>
-        <Button
-          disabled={handleCheckDisable()}
-          onClick={() => hanlePressRung(user.id)}
-        >
-          Chuông
-        </Button>
       </div>
-      <div className="flex  gap-6 min-w-[1000px]">
-        <Card
-          title={
-            <span className="text-white font-semibol">{`Câu hỏi ${numberQuestion.no}`}</span>
-          }
-          className="flex-1 baseColor"
-        >
-          <p className="text-white font-semibold">{numberQuestion.ques}</p>
+      <div className="flex gap-6 justify-stretch h-52 ">
+        <Card className="flex-1  baseColor relative">
+          <p className="text-2xl text-white pt-5">{numberQuestion?.ques}</p>
+          <div className=" flex gap-6 absolute  w-full -top-6 left-0">
+            {listUser?.map((item) => (
+              <div className="w-full bg-slate-700 relative" key={item?.id}>
+                <p
+                  style={{
+                    backgroundColor: idPress === item?.id ? "red" : "",
+                  }}
+                  key={item?.fullName}
+                  className="text-center flex-1 text-white bg-[#c972f4] p-3 text-2xl border border-solid border-white"
+                >{`${item?.fullName} (${item?.score})`}</p>
+              </div>
+            ))}
+          </div>
         </Card>
-        <div className="min-w-96 flex flex-col gap-2 text-white">
-          {listUser.map((item) => (
-            <div
-              key={item?.id}
-              style={
-                item.id === idPress
-                  ? {
-                      backgroundColor: "red",
-                      color: "#ffffff",
-                    }
-                  : {}
-              }
-              className="flex gap-2 items-center justify-between baseColor text-white rounded-md p-2"
-            >
-              <p className="font-semibold">{item.fullName}</p>
-              <p className="w-7 font-semibold">{item?.score}</p>
-            </div>
-          ))}
-        </div>
       </div>
       <div>
-        <Card title="Đáp án">
-          <p className="min-h-9">{numberQuestion.ans}</p>
-        </Card>
+        {user?.role === "MC" && (
+          <Card title="Đáp án">
+            <p className="min-h-9">{numberQuestion.ans}</p>
+          </Card>
+        )}
       </div>
     </div>
   );

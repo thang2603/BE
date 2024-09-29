@@ -10,7 +10,7 @@ const Control4 = () => {
   const [listUser, setListUser] = useState<UserUpdateType[]>([]);
   const [listQuestion, setListQuestion] = useState<QuestionFourType[]>([]);
   const { socket } = useContext(SocketContext);
-  const [listUserGame5, setListUserGame5] = useState<UserUpdateType[]>([]);
+  const [listUserGame5, setListUserGame5] = useState<number[]>([]);
   const [option, setOption] = useState<number[]>(INIT_OPTION);
   const handleChangeData = (iduser: number, valueNumber: number) => {
     const newData = onChangeData(listUser, iduser, valueNumber);
@@ -23,6 +23,9 @@ const Control4 = () => {
     });
     socket.on("questionUserServer4", (msg: QuestionFourType[]) => {
       setListQuestion([...msg]);
+    });
+    socket.on("listUserGameServer5", (msg: number[]) => {
+      setListUserGame5([...msg]);
     });
     return () => {
       socket.off();
@@ -86,6 +89,11 @@ const Control4 = () => {
   const handleWrongFinish = () => {
     socket.emit("wrongFinish4", "start");
   };
+
+  const handleCheckListUserGame5 = (idUser: number) => {
+    const isCheck = listUserGame5.find((item) => item === idUser);
+    return !!isCheck;
+  };
   const columnsUser = [
     {
       title: "Họ và tên",
@@ -144,6 +152,7 @@ const Control4 = () => {
       key: "id",
       render: (text: number, record: UserUpdateType) => (
         <Checkbox
+          checked={handleCheckListUserGame5(text)}
           onChange={(e) => handleSendUserGame5(record.id, e.target.checked)}
         />
       ),
@@ -200,12 +209,6 @@ const Control4 = () => {
             <Button onClick={handleStartTurn}>Bắt đầu lượt thi</Button>
             <Button onClick={handleCorrectFinish}>Trả lời đúng</Button>
             <Button onClick={handleWrongFinish}>Trả lời sai</Button>
-            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
-            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
-            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
-            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
-            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
-            <Button onClick={handleGetListUser}>Bắt đầu lượt thi</Button>
           </div>
           <div className="flex gap-4">
             <Button onClick={handleGetListUser}>Danh sách thí sinh</Button>
